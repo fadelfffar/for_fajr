@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:for_fajr/core/package_widgets/callback.dart';
+import 'package:for_fajr/ui/ui_widgets/primary_button.dart';
 import 'package:native_geofence/native_geofence.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -11,16 +12,37 @@ class CreateGeofence extends StatefulWidget {
 class _CreateGeofenceState extends State<CreateGeofence> {
   static const Location _timesSquare =
       Location(latitude: 40.75798, longitude: -73.98554);
+  static const Location _istiqomah =
+      Location(latitude: -7.383787, longitude: 109.342465);
+  static const Location _ikhlas =
+      Location(latitude: -7.381476, longitude: 109.343882);
 
   List<String> activeGeofences = [];
   late Geofence data;
+  late Geofence data2;
 
   @override
   void initState() {
     super.initState();
     data = Geofence(
       id: 'zone1',
-      location: _timesSquare,
+      location: _istiqomah,
+      radiusMeters: 500,
+      triggers: {
+        GeofenceEvent.enter,
+        GeofenceEvent.exit,
+        GeofenceEvent.dwell
+      },
+      iosSettings: IosGeofenceSettings(
+        initialTrigger: true,
+      ),
+      androidSettings: AndroidGeofenceSettings(
+        initialTriggers: {GeofenceEvent.enter},
+      ),
+    );
+    data2 = Geofence(
+      id: 'zone2',
+      location: _istiqomah,
       radiusMeters: 500,
       triggers: {
         GeofenceEvent.enter,
@@ -81,8 +103,8 @@ class _CreateGeofenceState extends State<CreateGeofence> {
                     data.copyWith(radiusMeters: () => double.parse(value)),
               ),
               SizedBox(height: 22),
-              ElevatedButton(
-                onPressed: () async {
+              PrimaryButton(
+                onPressedData: () async {
                   if (!await _checkPermissions()) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Lacking permissions!')),
@@ -96,19 +118,17 @@ class _CreateGeofenceState extends State<CreateGeofence> {
                   await Future.delayed(const Duration(seconds: 1));
                   await _updateRegisteredGeofences();
                 },
-                child: const Text('Register'),
-              ),
+                textButtonData: 'Register',),
               SizedBox(height: 22),
-              ElevatedButton(
-                onPressed: () async {
+              PrimaryButton(
+                onPressedData: () async {
                   await NativeGeofenceManager.instance.removeGeofence(data);
                   debugPrint('Geofence removed: ${data.id}');
                   await _updateRegisteredGeofences();
                   await Future.delayed(const Duration(seconds: 1));
                   await _updateRegisteredGeofences();
                 },
-                child: const Text('Unregister'),
-              ),
+                textButtonData: 'Unregister'),
               SizedBox(height: 22),
               ElevatedButton(
                 child: Text("Check Geofence's enter trigger"),
@@ -121,9 +141,9 @@ class _CreateGeofenceState extends State<CreateGeofence> {
                     activeGeofences = geofences;
                   });
                   if (activeGeofences == GeofenceEvent.enter || activeGeofences == GeofenceEvent.dwell) {
-                    print('Geofence enter is triggered');
+                    debugPrint('Geofence enter is triggered');
                   } else {
-                    print('Geofence is not triggered');
+                    debugPrint('Geofence is not triggered');
                   }
                 },
               ),

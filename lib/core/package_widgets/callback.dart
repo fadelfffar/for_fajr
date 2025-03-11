@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:for_fajr/core/notification/notification_service.dart';
 import 'package:native_geofence/native_geofence.dart';
 
 @pragma('vm:entry-point')
@@ -30,20 +31,10 @@ Future<void> geofenceTriggered(GeofenceCallbackParams params) async {
         'Event: ${params.event.name}\n'
         'Location: ${params.location?.latitude.toStringAsFixed(5)}, '
         '${params.location?.longitude.toStringAsFixed(5)}';
-    await plugin.show(
-      Random().nextInt(100000),
-      'Geofence ${capitalize(params.event.name)}: ${params.geofences.map((e) => e.id).join(', ')}',
-      message,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'geofence_triggers',
-          'Geofence Triggers',
-          styleInformation: BigTextStyleInformation(message),
-        ),
-        iOS: DarwinNotificationDetails(
-            interruptionLevel: InterruptionLevel.active),
-      ),
-      payload: 'item x',
+    await NotificationService().showNotification(
+      id : Random().nextInt(100000),
+      title:  'Geofence ${capitalize(params.event.name)}: ${params.geofences.map((e) => e.id).join(', ')}',
+      body: message,
     );
     debugPrint('Notification sent.');
   } catch (e, s) {
