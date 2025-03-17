@@ -22,8 +22,10 @@ class MasjidCard extends StatelessWidget {
           leading: Text(textMasjidName),
           title: Text(textMasjidLocation),
           subtitle: Text(textMasjidEvent),
-          ),
+          selectedColor: Color.fromARGB(255, 13, 32, 108),
+          textColor: Color.fromARGB(255, 8, 154, 69),
         ),
-      );
+      ),
+    );
   }
 }

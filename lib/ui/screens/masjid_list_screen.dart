@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:for_fajr/ui/ui_widgets/masjid_card.dart';
-import 'package:for_fajr/ui/ui_widgets/primary_button.dart';
 
 class MasjidListScreen extends StatelessWidget {
   const MasjidListScreen({super.key});
@@ -24,12 +23,23 @@ class MasjidListScreen extends StatelessWidget {
       ),
       body: Container(
         padding: EdgeInsets.only(left: 18, right:18),
-        child: Column(
+        child: ListView(
           children: [
             MasjidCard(textMasjidName: "Al-Istiqomah", textMasjidLocation: "Bojanegara, Purbalingga", textMasjidEvent: "Kultum Subuh"),
             SizedBox(height: 18,),
             MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
-            PrimaryButton(onPressedData: () {}, textButtonData: "test")
+            SizedBox(height: 18,),
+            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
+            SizedBox(height: 18,),
+            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
+            SizedBox(height: 18,),
+            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
+            SizedBox(height: 18,),
+            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
+            SizedBox(height: 18,),
+            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
+            SizedBox(height: 18,),
+            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
           ],
         ),
       ),

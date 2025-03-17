@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:for_fajr/core/geofence_screen.dart';
+import 'package:for_fajr/core/notification/notification_service.dart';
 import 'package:native_geofence/native_geofence.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -7,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await NotificationService().initNotification();
   runApp(const MainApp());
   
 }
