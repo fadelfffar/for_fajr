@@ -10,8 +10,14 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_local_notifications: ^19.0.0-dev.7
+  functions_client: ^2.4.1
+  mock_supabase_http_client: ^0.0.3+2
   native_geofence: ^1.0.9
   permission_handler: ^11.4.0
+  realtime_client: ^2.4.2
+  storage_client: ^2.3.1
+  supabase: ^2.6.3
+  supabase_flutter: ^2.8.4
 
 dev_dependencies:
   flutter_test:

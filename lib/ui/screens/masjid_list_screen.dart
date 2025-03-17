@@ -25,7 +25,11 @@ class MasjidListScreen extends StatelessWidget {
         padding: EdgeInsets.only(left: 18, right:18),
         child: ListView(
           children: [
-            MasjidCard(textMasjidName: "Al-Istiqomah", textMasjidLocation: "Bojanegara, Purbalingga", textMasjidEvent: "Kultum Subuh"),
+            ElevatedButton(onPressed: () {
+              Navigator.pushNamed(context, '/masjid-detail');
+            }, child:
+              MasjidCard(textMasjidName: "Al-Istiqomah", textMasjidLocation: "Bojanegara, Purbalingga", textMasjidEvent: "Kultum Subuh",),
+            ),
             SizedBox(height: 18,),
             MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
             SizedBox(height: 18,),
