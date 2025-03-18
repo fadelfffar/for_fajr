@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:for_fajr/core/database/supabase_service.dart';
 import 'package:for_fajr/ui/ui_widgets/masjid_card.dart';
 
 class MasjidListScreen extends StatelessWidget {
@@ -26,7 +27,7 @@ class MasjidListScreen extends StatelessWidget {
         child: ListView(
           children: [
             ElevatedButton(onPressed: () {
-              Navigator.pushNamed(context, '/masjid-detail');
+              insertData();
             }, child:
               MasjidCard(textMasjidName: "Al-Istiqomah", textMasjidLocation: "Bojanegara, Purbalingga", textMasjidEvent: "Kultum Subuh",),
             ),
