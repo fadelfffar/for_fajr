@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:for_fajr/core/database/supabase_service.dart';
-import 'package:for_fajr/ui/ui_widgets/masjid_card.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MasjidListScreen extends StatelessWidget {
   const MasjidListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final _masjidStream = Supabase.instance.client.from('masjid').stream(primaryKey: ['id']);
+    final supabaseFetch = Supabase.instance.client.from('masjid').select('masjid_name');
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -22,32 +24,49 @@ class MasjidListScreen extends StatelessWidget {
           child: Text("Masjid List Screen"),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.only(left: 18, right:18),
-        child: ListView(
-          children: [
-            ElevatedButton(onPressed: () {
-              insertData();
-            }, child:
-              MasjidCard(textMasjidName: "Al-Istiqomah", textMasjidLocation: "Bojanegara, Purbalingga", textMasjidEvent: "Kultum Subuh",),
-            ),
-            SizedBox(height: 18,),
-            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
-            SizedBox(height: 18,),
-            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
-            SizedBox(height: 18,),
-            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
-            SizedBox(height: 18,),
-            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
-            SizedBox(height: 18,),
-            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
-            SizedBox(height: 18,),
-            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
-            SizedBox(height: 18,),
-            MasjidCard(textMasjidName: "Al-Ikhlas", textMasjidLocation: "Karangsentul, Purbalingga", textMasjidEvent: "Kultum Subuh"),
-          ],
-        ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return SimpleDialog(
+                    title: const Text("add"),
+                    children: [
+                      TextFormField(
+                        onFieldSubmitted: (value) async {
+                          await Supabase.instance.client
+                              .from('masjid')
+                              .insert({'masjid_name': value});
+                        },
+                      ),
+                    ]
+                  );
+                }
+            );
+          }
       ),
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+          stream: _masjidStream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            } else if(snapshot.hasError) {
+              return Text('${snapshot.error}');
+            } else if (snapshot.hasData) {
+              final masjid = snapshot.data!;
+              return ListView.builder(
+                  itemCount: masjid.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(masjid[index]['masjid_name']),
+                    );
+                  }
+              );
+            };
+            return Text("Fetch failed");
+
+          }),
     );
   }
 }
