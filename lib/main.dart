@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:for_fajr/core/geofence_screen.dart';
 import 'package:for_fajr/ui/screens/masjid_detail_screen.dart';
 import 'package:for_fajr/ui/screens/masjid_list_screen.dart';
+import 'package:for_fajr/ui/screens/post_card_test.dart';
 import 'package:native_geofence/native_geofence.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
+    // TODO() : IMPORTANT!!! make this key and url private when committing to github
     url: 'https://ebzjdnzaicpulzxbvucl.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViempkbnphaWNwdWx6eGJ2dWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyMDI5NTksImV4cCI6MjA1Nzc3ODk1OX0.BBAwzNxfFFRsz7oqC1VAVyeS6PiM7VaPh1kzt14lbTc',
   );
@@ -50,12 +51,13 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MasjidListScreen(),
-      initialRoute: '/masjid-list',
+      home: PostCardTest(),
+      initialRoute: '/post-card-test',
       routes: {
         '/geofence': (context) => GeofenceScreen(),
         '/masjid-list': (context) => MasjidListScreen(),
-        '/masjid-detail': (context) => MasjidDetailScreen()
+        '/masjid-detail': (context) => MasjidDetailScreen(),
+        '/post-card-test': (context) => PostCardTest(),
       },
       title: 'For Fajr',
       theme: ThemeData(

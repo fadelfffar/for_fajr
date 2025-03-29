@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:for_fajr/ui/ui_widgets/post_card.dart';
 
 class MasjidDetailScreen extends StatelessWidget {
   const MasjidDetailScreen({super.key});
@@ -31,6 +32,7 @@ class MasjidDetailScreen extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
+            PostCard(textMasjidName: "Test Post Name", textMasjidLocation: "TestPostLocation"),
             Text("Location:", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
             Text("Masjid Al-Islam, Palestine", style: TextStyle(fontSize: 20)),
             SizedBox(height: 20,),
