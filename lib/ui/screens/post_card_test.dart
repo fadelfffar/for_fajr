@@ -6,7 +6,7 @@ class PostCardTest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _postFetch = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
+    final _postFetch = Supabase.instance.client.from('post_test').select().single();
         final supabaseFetch = Supabase.instance.client.from('post_test').select('masjid_name');
 
     int like_count = 0;
@@ -26,20 +26,16 @@ class PostCardTest extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           //TODO: Increment like count
-          like_count = like_count + 1;
-          Supabase.instance.client
-                  .from('post_test')
-                  .insert({'like_number' : 5});
-                  
+          await Supabase.instance.client.rpc('increment_likes');
         },
         child: Icon(Icons.add),
       ),
       body: Card(
         child: Column(
           children: [
-            StreamBuilder(stream: _postFetch, builder: (context, snapshot) {
+            FutureBuilder(future: _postFetch, builder: (context, snapshot) {
             if (!snapshot.hasData) {
               // By default, show a loading spinner.
               return const CircularProgressIndicator();
