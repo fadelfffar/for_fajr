@@ -28,7 +28,7 @@ class PostCardTest extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           //TODO: Increment like count
-          await Supabase.instance.client.rpc('increment_likes');
+          await Supabase.instance.client.rpc('increment_likes()');
         },
         child: Icon(Icons.add),
       ),
