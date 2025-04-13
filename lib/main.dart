@@ -51,7 +51,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MasjidListScreen(),
-      initialRoute: '/masjid-list',
+      initialRoute: '/geofence',
       routes: {
         '/geofence': (context) => GeofenceScreen(),
         '/masjid-list': (context) => MasjidListScreen(),

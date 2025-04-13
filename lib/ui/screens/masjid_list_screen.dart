@@ -4,6 +4,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class MasjidListScreen extends StatelessWidget {
   const MasjidListScreen({super.key});
 
+  //TODO: Make Input Screen for obtaining Masjid location and Event by user
+  //TODO: Decide between passing Input data to Google Form(or else) or directly to Supabase(immediately shows on public data)
+  // and add a second validation or moderator for checking the data
   @override
   Widget build(BuildContext context) {
     final _masjidStream = Supabase.instance.client.from('masjid').stream(primaryKey: ['id']);
@@ -35,8 +38,8 @@ class MasjidListScreen extends StatelessWidget {
                       TextFormField(
                         onFieldSubmitted: (value) async {
                           await Supabase.instance.client
-                              .from('masjid')
-                              .insert({'masjid_name': value});
+                            .from('masjid')
+                            .insert({'masjid_name': value});
                         },
                       ),
                     ]
