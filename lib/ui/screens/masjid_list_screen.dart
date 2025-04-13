@@ -31,6 +31,7 @@ class MasjidListScreen extends StatelessWidget {
                   return SimpleDialog(
                     title: const Text("add"),
                     children: [
+                      // TODO: make InputForm UI more appealing
                       TextFormField(
                         onFieldSubmitted: (value) async {
                           await Supabase.instance.client
