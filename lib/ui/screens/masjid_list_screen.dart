@@ -45,6 +45,7 @@ class MasjidListScreen extends StatelessWidget {
                   itemCount: masjid.length,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      // make sure the data is available in supabase and not NULL
                       title: Text(masjid[index]['masjid_name']),
                       subtitle:  Text(masjid[index]['location_city']),
                     );

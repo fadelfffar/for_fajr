@@ -24,6 +24,7 @@ class _CreateGeofenceState extends State<CreateGeofence> {
   @override
   void initState() {
     super.initState();
+    // TODO: change geofence data Model to retrive data from supabase
     data = Geofence(
       id: 'zone1',
       location: _istiqomah,
