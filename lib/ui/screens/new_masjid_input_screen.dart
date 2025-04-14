@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:for_fajr/core/database/masjid_model.dart';
 import 'package:for_fajr/ui/ui_widgets/primary_button.dart';
-import 'package:native_geofence/native_geofence.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewMasjidInputScreen extends StatefulWidget {
   const NewMasjidInputScreen({super.key});
@@ -12,11 +13,14 @@ class NewMasjidInputScreen extends StatefulWidget {
 class _NewMasjidInputScreenState extends State<NewMasjidInputScreen> {
 
   //TODO: add Masjid Class that specifies Supabase Data
-  late /* Masjid */ data;
+  late MasjidModel data;
 
   @override
   void initState() {
     //TODO: make temporary data value to store TextForm
+    super.initState();
+    data = MasjidModel(
+      masjidName: "Masjid Name", masjid_city: "City");
   }
 
   @override
@@ -31,28 +35,26 @@ class _NewMasjidInputScreenState extends State<NewMasjidInputScreen> {
               child: Column(
                 children: [
                   Text("Add New Masjid"),
-                  // TextFormField(
-                  //   decoration: InputDecoration(labelText: 'Masjid Name'),
-                  //   onFieldSubmitted: (value) async {
-                  //     await Supabase.instance.client
-                  //       .from('masjid')
-                  //       .insert({'masjid_name': value});
-                  //   },
-                  // ),
-                  // TextFormField(
-                  //   decoration: InputDecoration(labelText: 'City'),
-                  //   onFieldSubmitted: (value) async {
-                  //     await Supabase.instance.client
-                  //       .from('masjid')
-                  //       .insert({'location_city': value});
-                  //   },
-                  // ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Masjid Name'),
+                    //TODO: change to OnChange so user don't have to Submit each time the data is changed
+                    onFieldSubmitted: (value) {
+                      data.masjidName = value;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'City'),
+                    //TODO: change to OnChange so user don't have to Submit each time the data is changed
+                    onFieldSubmitted: (value) {
+                      data.masjid_city = value;
+                    },
+                  ),
                   //TODO: add a button that submit all data in one go
                   PrimaryButton(
                     onPressedData: () async{
-                      if (condition) {
-                        
-                      }
+                      await Supabase.instance.client
+                        .from('masjid')
+                        .insert({'masjid_name': data.masjidName, 'location_city': data.masjid_city});
                     }, textButtonData: 'Register')
                 ],
               ),)
