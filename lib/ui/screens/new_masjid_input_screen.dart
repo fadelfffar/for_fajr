@@ -20,12 +20,16 @@ class _NewMasjidInputScreenState extends State<NewMasjidInputScreen> {
     //TODO: make temporary data value to store TextForm
     super.initState();
     data = MasjidModel(
-      masjidName: "Masjid Name", masjid_city: "City");
+      masjidName: "Masjid Name", masjidLatitude: "0", masjidLongitude: "0", masjidCity: "City");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, '/masjid-list');
+      } , child: Icon(Icons.arrow_back_ios_new)),
       body: Container(
         padding: EdgeInsets.only(left: 24, right: 24),
         child: Column(
@@ -44,14 +48,26 @@ class _NewMasjidInputScreenState extends State<NewMasjidInputScreen> {
                   TextFormField(
                     decoration: InputDecoration(labelText: 'City'),
                     onChanged: (value) {
-                      data.masjid_city = value;
+                      data.masjidCity = value;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Latitude'),
+                    onChanged: (value) {
+                      data.masjidLatitude = value;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Longitude'),
+                    onChanged: (value) {
+                      data.masjidLongitude = value;
                     },
                   ),
                   PrimaryButton(
                     onPressedData: () async{
                       await Supabase.instance.client
                         .from('masjid')
-                        .insert({'masjid_name': data.masjidName, 'location_city': data.masjid_city});
+                        .insert({'masjid_name': data.masjidName, 'location_latitude': data.masjidLatitude, 'location_longitude': data.masjidLongitude, 'location_city': data.masjidCity});
                     }, textButtonData: 'Register')
                 ],
               ),)

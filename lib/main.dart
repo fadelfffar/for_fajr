@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:for_fajr/core/geofence_screen.dart';
-import 'package:for_fajr/ui/screens/masjid_detail_screen.dart';
 import 'package:for_fajr/ui/screens/masjid_list_screen.dart';
 import 'package:for_fajr/ui/screens/new_masjid_input_screen.dart';
 import 'package:native_geofence/native_geofence.dart';
@@ -56,7 +55,6 @@ class _MainAppState extends State<MainApp> {
       routes: {
         '/geofence': (context) => GeofenceScreen(),
         '/masjid-list': (context) => MasjidListScreen(),
-        '/masjid-detail': (context) => MasjidDetailScreen(),
         '/new-masjid': (context) => NewMasjidInputScreen(),
       },
       title: 'For Fajr',

@@ -10,7 +10,7 @@ class MasjidListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _masjidStream = Supabase.instance.client.from('masjid').stream(primaryKey: ['id']);
-    final supabaseFetch = Supabase.instance.client.from('masjid').select('masjid_name');
+    final supabaseFetch = Supabase.instance.client.from('masjid');
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -28,25 +28,8 @@ class MasjidListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return SimpleDialog(
-                    title: const Text("add"),
-                    children: [
-                      // TODO: make InputForm UI more appealing
-                      TextFormField(
-                        onFieldSubmitted: (value) async {
-                          await Supabase.instance.client
-                            .from('masjid')
-                            .insert({'masjid_name': value});
-                        },
-                      ),
-                    ]
-                  );
-                }
-            );
-          }
+            Navigator.pushReplacementNamed(context, '/new-masjid');
+          }, child: Icon(Icons.add),
       ),
       body: StreamBuilder<List<Map<String, dynamic>>>(
           stream: _masjidStream,
@@ -63,6 +46,7 @@ class MasjidListScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(masjid[index]['masjid_name']),
+                      subtitle:  Text(masjid[index]['location_city']),
                     );
                   }
               );
