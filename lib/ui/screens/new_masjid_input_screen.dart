@@ -12,12 +12,12 @@ class NewMasjidInputScreen extends StatefulWidget {
 
 class _NewMasjidInputScreenState extends State<NewMasjidInputScreen> {
 
-  //TODO: add Masjid Class that specifies Supabase Data
+  // MasjidModel that specifies Supabase Data
   late MasjidModel data;
 
   @override
   void initState() {
-    //TODO: make temporary data value to store TextForm
+    //data model initialization as required by compiler
     super.initState();
     data = MasjidModel(
       masjidName: "Masjid Name", masjidLatitude: "0", masjidLongitude: "0", masjidCity: "City");
