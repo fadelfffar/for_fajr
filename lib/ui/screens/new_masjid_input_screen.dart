@@ -37,19 +37,16 @@ class _NewMasjidInputScreenState extends State<NewMasjidInputScreen> {
                   Text("Add New Masjid"),
                   TextFormField(
                     decoration: InputDecoration(labelText: 'Masjid Name'),
-                    //TODO: change to OnChange so user don't have to Submit each time the data is changed
-                    onFieldSubmitted: (value) {
+                    onChanged: (value) {
                       data.masjidName = value;
                     },
                   ),
                   TextFormField(
                     decoration: InputDecoration(labelText: 'City'),
-                    //TODO: change to OnChange so user don't have to Submit each time the data is changed
-                    onFieldSubmitted: (value) {
+                    onChanged: (value) {
                       data.masjid_city = value;
                     },
                   ),
-                  //TODO: add a button that submit all data in one go
                   PrimaryButton(
                     onPressedData: () async{
                       await Supabase.instance.client
