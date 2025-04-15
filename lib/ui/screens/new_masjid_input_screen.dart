@@ -3,6 +3,7 @@ import 'package:for_fajr/core/database/masjid_model.dart';
 import 'package:for_fajr/ui/ui_widgets/primary_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// passing Input data directly Supabase(immediately shows on public data)
 class NewMasjidInputScreen extends StatefulWidget {
   const NewMasjidInputScreen({super.key});
 
