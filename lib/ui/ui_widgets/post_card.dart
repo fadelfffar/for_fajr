@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class PostCard extends StatelessWidget {
-  String textMasjidName;
-  String textMasjidLocation;
+  String postTitle;
+  String postCaption;
 
   PostCard({
     Key? key,
-    required this.textMasjidName,
-    required this.textMasjidLocation,
+    required this.postTitle,
+    required this.postCaption,
   }) : super(key: key);
 
   @override
@@ -18,8 +18,8 @@ class PostCard extends StatelessWidget {
       child: Card(
         child: Column(
           children: [
-            Text(textMasjidName),
-            Text(textMasjidLocation),
+            Text(postTitle),
+            Text(postCaption),
             Row(
             children: [
               Text("Like Number"),
