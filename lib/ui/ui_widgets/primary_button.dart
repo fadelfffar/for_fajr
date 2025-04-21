@@ -15,7 +15,6 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      //TODO: implement onPressed to each button
       onPressed: onPressedData,
       style: ButtonStyle(
         fixedSize: const WidgetStatePropertyAll(Size(368, 49),),

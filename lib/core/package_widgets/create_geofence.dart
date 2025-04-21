@@ -25,6 +25,7 @@ class _CreateGeofenceState extends State<CreateGeofence> {
   void initState() {
     super.initState();
     // TODO: change geofence data Model to retrive data from supabase
+    // option : stream the data (new data active automatically) or input specific data one by one
     data = Geofence(
       id: 'zone1',
       location: _istiqomah,

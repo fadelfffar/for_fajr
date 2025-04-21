@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:for_fajr/core/geofence_screen.dart';
+import 'package:for_fajr/ui/screens/login_screen.dart';
 import 'package:for_fajr/ui/screens/masjid_list_screen.dart';
 import 'package:for_fajr/ui/screens/new_masjid_input_screen.dart';
 import 'package:native_geofence/native_geofence.dart';
@@ -51,11 +52,12 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MasjidListScreen(),
-      initialRoute: '/new-masjid',
+      initialRoute: '/login',
       routes: {
         '/geofence': (context) => GeofenceScreen(),
         '/masjid-list': (context) => MasjidListScreen(),
         '/new-masjid': (context) => NewMasjidInputScreen(),
+        '/login' : (context) => LoginScreen(),
       },
       title: 'For Fajr',
       theme: ThemeData(
