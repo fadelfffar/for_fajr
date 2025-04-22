@@ -5,6 +5,7 @@ import 'package:for_fajr/ui/screens/masjid_list_screen.dart';
 import 'package:for_fajr/ui/screens/new_masjid_input_screen.dart';
 import 'package:for_fajr/ui/screens/new_post_screen.dart';
 import 'package:for_fajr/ui/screens/post_list_screen.dart';
+import 'package:for_fajr/ui/screens/sign_up_screen.dart';
 import 'package:native_geofence/native_geofence.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -60,6 +61,7 @@ class _MainAppState extends State<MainApp> {
         '/masjid-list': (context) => MasjidListScreen(),
         '/new-masjid': (context) => NewMasjidInputScreen(),
         '/login' : (context) => LoginScreen(),
+        '/sign-up' : (context) => SignUpScreen(),
         '/post-list' : (context) => PostListScreen(),
         '/new-post' : (context) => NewPostScreen(),
       },
