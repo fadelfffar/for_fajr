@@ -43,7 +43,13 @@ class PostListScreen extends StatelessWidget {
                     return ListTile(
                       // make sure the data is available in supabase and not NULL
                       title: Text(masjid[index]['post_title']),
-                      subtitle:  Text(masjid[index]['post_caption']),
+                      leading: Text(masjid[index]['post_caption']),
+                      subtitle: ElevatedButton(
+                        onPressed: () {
+                          // TODO : Implement liked button
+                          Supabase.instance.client.rpc("increment_likes");
+                        },
+                        child: Icon(Icons.thumb_up_sharp)),
                     );
                   }
               );
