@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:for_fajr/core/geofence_screen.dart';
+import 'package:for_fajr/ui/screens/comment_list_screen.dart';
 import 'package:for_fajr/ui/screens/login_screen.dart';
 import 'package:for_fajr/ui/screens/masjid_list_screen.dart';
 import 'package:for_fajr/ui/screens/new_masjid_input_screen.dart';
@@ -64,6 +65,7 @@ class _MainAppState extends State<MainApp> {
         '/sign-up' : (context) => SignUpScreen(),
         '/post-list' : (context) => PostListScreen(),
         '/new-post' : (context) => NewPostScreen(),
+        '/comment-list': (context) => CommentListScreen(),
       },
       title: 'For Fajr',
       theme: ThemeData(

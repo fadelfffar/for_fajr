@@ -42,7 +42,11 @@ class PostListScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return ListTile(
                       // make sure the data is available in supabase and not NULL
-                      title: Text(masjid[index]['post_title']),
+                      title: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/comment-list');
+                          },
+                          child: Text(masjid[index]['post_title'])),
                       leading: Text(masjid[index]['post_caption']),
                       subtitle: ElevatedButton(
                         onPressed: () {
