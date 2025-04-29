@@ -15,6 +15,7 @@ class CommentListScreen extends StatelessWidget {
           children: [
             SizedBox(height: 80,),
             Text("Comment List"),
+            // TODO: Fix StreamBuilder
             StreamBuilder(
               stream: _commentStream,
               builder: (context, snapshot) {
