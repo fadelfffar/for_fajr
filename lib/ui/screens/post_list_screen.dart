@@ -46,7 +46,8 @@ class PostListScreen extends StatelessWidget {
                       leading: Text(masjid[index]['post_caption']),
                       subtitle: ElevatedButton(
                         onPressed: () {
-                          // TODO : Implement liked button
+                          // TODO : asign Supabase RPC function to increment likes for corresponding post
+                          // TODO (Advanced) : make new table with foreign key on PostID to save other user post to main user
                           Supabase.instance.client.rpc("increment_likes");
                         },
                         child: Icon(Icons.thumb_up_sharp)),
