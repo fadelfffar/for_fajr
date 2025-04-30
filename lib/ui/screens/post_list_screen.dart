@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:for_fajr/ui/screens/comment_list_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PostListScreen extends StatelessWidget {
@@ -6,7 +7,7 @@ class PostListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _masjidStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
+    final _postStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -28,7 +29,7 @@ class PostListScreen extends StatelessWidget {
           }, child: Icon(Icons.add),
       ),
       body: StreamBuilder<List<Map<String, dynamic>>>(
-          stream: _masjidStream,
+          stream: _postStream,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               // By default, show a loading spinner.
@@ -36,18 +37,28 @@ class PostListScreen extends StatelessWidget {
             } else if(snapshot.hasError) {
               return Text('${snapshot.error}');
             } else if (snapshot.hasData) {
-              final masjid = snapshot.data!;
+              final post = snapshot.data!;
               return ListView.builder(
-                  itemCount: masjid.length,
+                  itemCount: post.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       // make sure the data is available in supabase and not NULL
                       title: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/comment-list');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) => CommentListScreen(id : post[index]['post_id'])));
                           },
-                          child: Text(masjid[index]['post_title'])),
-                      leading: Text(masjid[index]['post_caption']),
+                          child: Text(post[index]['post_title'])),
+                          // need builder on top
+                          // InkWell(
+                          //   onTap: () {
+                          //     Navigator.of(context).push(MaterialPageRoute(
+                          // pass data to the next screen???
+                          //         builder: (context) => MovieDetail(movieList[index].id)));
+                          //   },
+                      leading: Text(post[index]['post_caption']),
                       subtitle: ElevatedButton(
                         onPressed: () {
                           // TODO : asign Supabase RPC function to increment likes for corresponding post

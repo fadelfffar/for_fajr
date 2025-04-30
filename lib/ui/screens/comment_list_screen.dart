@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CommentListScreen extends StatelessWidget {
-  const CommentListScreen({super.key});
+  const CommentListScreen({super.key, required this.id});
   
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,6 @@ class CommentListScreen extends StatelessWidget {
               } else if (snapshot.hasData) {
                 final comment = snapshot.data!;
                 return ListView.builder(
-                    itemCount: comment.length,
                     itemBuilder: (context, index) {
                       return ListTile(
                         // make sure the data is available in supabase and not NULL
