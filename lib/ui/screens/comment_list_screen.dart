@@ -26,29 +26,32 @@ class CommentListScreen extends StatelessWidget {
       ),
       body: 
             // TODO: Add Padding on parent and style
-            StreamBuilder(
-              stream: _commentStream,
-              builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                // By default, show a loading spinner.
-                return const CircularProgressIndicator();
-              } else if(snapshot.hasError) {
-                return Text('${snapshot.error}');
-              } else if (snapshot.hasData) {
-                final comment = snapshot.data!;
-                return ListView.builder(
-                    itemCount: comment.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        // make sure the data is available in supabase and not NULL
-                        title: Text("test"), 
-                        leading: Text(comment[index]['comment_caption']),
-                      );
-                    }
-                );
-              };
-              return Text("Fetch failed");
-            })
+            Container(
+              padding: EdgeInsets.all(24),
+              child: StreamBuilder(
+                stream: _commentStream,
+                builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                } else if(snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final comment = snapshot.data!;
+                  return ListView.builder(
+                      itemCount: comment.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          // make sure the data is available in supabase and not NULL
+                          title: Text("test"), 
+                          leading: Text(comment[index]['comment_caption']),
+                        );
+                      }
+                  );
+                };
+                return Text("Fetch failed");
+              }),
+            )
     );
   }
 }
