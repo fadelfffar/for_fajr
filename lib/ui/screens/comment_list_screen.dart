@@ -25,7 +25,7 @@ class CommentListScreen extends StatelessWidget {
         ),
       ),
       body: 
-            // TODO: Fix StreamBuilder
+            // TODO: Add Padding on parent and style
             StreamBuilder(
               stream: _commentStream,
               builder: (context, snapshot) {
