@@ -8,6 +8,7 @@ class PostListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _postStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
+    // TODO(): investigate why there is a back button on almost every appbar
     return Scaffold(
       appBar: AppBar(
         title: Text(""),

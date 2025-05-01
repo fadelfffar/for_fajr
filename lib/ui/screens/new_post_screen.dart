@@ -30,7 +30,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushReplacementNamed(context, '/post-list');
-      } , child: Icon(Icons.arrow_back_ios_new)),
+      } , child: Text("Back")),
       body: Container(
         padding: EdgeInsets.only(left: 24, right: 24),
         child: Column(

@@ -10,12 +10,21 @@ class CommentListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final _commentStream = Supabase.instance.client.from('comment_list').stream(primaryKey: ['comment_id']);
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(24),
-        child: Column(
-          children: [
-            SizedBox(height: 80,),
-            Text("Comment List"),
+      appBar: AppBar(
+        title: Text(""),
+        // add Border with shape
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
+        ),
+        // define upper appbar height
+        toolbarHeight: 40,
+        // PreferrezSize make a new widget under appBar by extending it
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(24),
+          child: Text("Post List Screen"),
+        ),
+      ),
+      body: 
             // TODO: Fix StreamBuilder
             StreamBuilder(
               stream: _commentStream,
@@ -28,10 +37,11 @@ class CommentListScreen extends StatelessWidget {
               } else if (snapshot.hasData) {
                 final comment = snapshot.data!;
                 return ListView.builder(
+                    itemCount: comment.length,
                     itemBuilder: (context, index) {
                       return ListTile(
                         // make sure the data is available in supabase and not NULL
-                        title: Text("test"),
+                        title: Text("test"), 
                         leading: Text(comment[index]['comment_caption']),
                       );
                     }
@@ -39,9 +49,6 @@ class CommentListScreen extends StatelessWidget {
               };
               return Text("Fetch failed");
             })
-          ],
-        ),
-      ),
     );
   }
 }
