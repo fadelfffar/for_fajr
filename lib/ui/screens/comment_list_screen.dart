@@ -8,7 +8,7 @@ class CommentListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _commentStream = Supabase.instance.client.from('comment_list').stream(primaryKey: ['comment_id']);
+    final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -28,8 +28,8 @@ class CommentListScreen extends StatelessWidget {
             // TODO: Add Padding on parent and style
             Container(
               padding: EdgeInsets.all(24),
-              child: StreamBuilder(
-                stream: _commentStream,
+              child: FutureBuilder(
+                future: _commentStream,
                 builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   // By default, show a loading spinner.
