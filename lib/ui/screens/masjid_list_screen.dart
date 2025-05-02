@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class MasjidListScreen extends StatelessWidget {
-  const MasjidListScreen({super.key});
+class PostListScreen extends StatelessWidget {
+  const PostListScreen({super.key});
 
-  // TODO: decide to add a second validation or moderator for checking the data
   @override
   Widget build(BuildContext context) {
-    final _masjidStream = Supabase.instance.client.from('masjid').stream(primaryKey: ['id']);
-    final supabaseFetch = Supabase.instance.client.from('masjid');
+    final _postStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
+    final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');    
+    // TODO(): investigate why there is a back button on almost every appbar
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -19,39 +19,89 @@ class MasjidListScreen extends StatelessWidget {
         // define upper appbar height
         toolbarHeight: 40,
         // PreferrezSize make a new widget under appBar by extending it
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(24),
-          child: Text("Masjid List Screen"),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: const Size.fromHeight(10),
+        //   child: Text("Post List Screen"),
+        // ),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/new-masjid');
+            Navigator.pushReplacementNamed(context, '/new-post');
           }, child: Icon(Icons.add),
       ),
-      body: StreamBuilder<List<Map<String, dynamic>>>(
-          stream: _masjidStream,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            } else if(snapshot.hasError) {
-              return Text('${snapshot.error}');
-            } else if (snapshot.hasData) {
-              final masjid = snapshot.data!;
-              return ListView.builder(
-                  itemCount: masjid.length,
+      body: Container(
+        padding: EdgeInsets.all(24),
+        child: StreamBuilder<List<Map<String, dynamic>>>(
+            stream: _postStream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              } else if(snapshot.hasError) {
+                return Text('${snapshot.error}');
+              } else if (snapshot.hasData) {
+                final post = snapshot.data!;
+                return ListView.builder(
+                  itemCount: post.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      // make sure the data is available in supabase and not NULL
-                      title: Text(masjid[index]['masjid_name']),
-                      subtitle:  Text(masjid[index]['location_city']),
-                    );
-                  }
-              );
-            };
-            return Text("Fetch failed");
-          }),
+                    final int like_number = snapshot.data![index]['like_number'];
+                    return Column(
+                      children: [
+                        Card(
+                          color: Colors.lightGreen,
+                          borderOnForeground: true,
+                          elevation: 8,
+                          child: ListTile(
+                            title: Text(post[index]['post_title']),
+                            trailing:  Text(post[index]['post_caption']),
+                            subtitle: Row(
+                          children: [
+                            Icon(Icons.comment_rounded),
+                            Text(like_number.toString()),
+                            Icon(Icons.thumb_up_sharp)
+                          ],
+                        ),
+                          ),
+                        ),
+                        Container(
+                        padding: EdgeInsets.all(24),
+                        child: FutureBuilder(
+                          future: _commentStream,
+                          builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          } else if(snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          } else if (snapshot.hasData) {
+                            final comment = snapshot.data!;
+                            return Card(
+                          color: Colors.lightGreen,
+                          borderOnForeground: true,
+                          elevation: 8,
+                          child: ListTile(
+                            title: Text("Comment Title (need data)"),
+                            trailing:  Text(comment[index]['comment_caption']),
+                            subtitle: Row(
+                          children: [
+                            Icon(Icons.comment_rounded),
+                            Text(like_number.toString()),
+                            Icon(Icons.thumb_up_sharp)
+                          ],
+                        ),
+                          ),
+                        );
+                          }
+                          return Text("Fetch Failed");
+                          }
+                        ),
+                    )],
+                  );}
+                );
+              };
+              return Text("Fetch failed");
+            }),
+      ),
     );
   }
 }
