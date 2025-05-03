@@ -6,8 +6,15 @@ class PostListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO(): is comments used or not
+    List<dynamic> comments = [];
     final _postStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
-    final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');    
+    // Select 
+    final _commentStreamCount = Supabase.instance.client.from('comment_list')
+        .select()
+        .eq('post_id', 1)
+        .order('comment_id', ascending: true);
+    final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');
     // TODO(): investigate why there is a back button on almost every appbar
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +84,7 @@ class PostListScreen extends StatelessWidget {
                         Container(
                         // padding: EdgeInsets.all(24),
                         child: FutureBuilder(
-                          future: _commentStream,
+                          future: _commentStreamCount,
                           builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             // By default, show a loading spinner.
@@ -86,26 +93,19 @@ class PostListScreen extends StatelessWidget {
                             return Text('${snapshot.error}');
                           } else if (snapshot.hasData) {
                             final comment = snapshot.data!;
-                            return Card(
-                          color: Colors.white,
-                          borderOnForeground: true,
-                          elevation: 8,
-                          child: ListTile(
-                            title: Text("Comment Title (need data)"),
-                            trailing:  Text(comment[index]['comment_caption']),
-                            subtitle: Row(
-                          children: [
-                            Icon(Icons.thumb_up_sharp),
-                            Text(like_number.toString()),
-                          ],
-                        ),
-                          ),
-                        );
+                            return ListView.builder(
+                              itemCount: comment.length,
+                              itemBuilder: (context, index) {
+                                // TODO(): Figure out how to show different index
+                                return Text(comment[index]['comment_caption']
+                          );
+                        
                           }
-                          return Text("Fetch Failed");
-                          }
-                        ),
-                    )],
+                            );
+                        }
+                        return Text("Error");
+                      },
+                    ),),],
                   );}
                 );
               };
