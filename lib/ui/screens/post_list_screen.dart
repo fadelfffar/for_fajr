@@ -63,8 +63,19 @@ class PostListScreen extends StatelessWidget {
                         ),
                           ),
                         ),
+                        // TODO(): add line between
+                        SizedBox(height: 8,),
+                        Row(
+                          children: [
+                            Text("Comments (comment_count)"),
+                            SizedBox(width: 80,),
+                            Icon(Icons.archive_rounded)
+                          ],
+                        ),
+                        SizedBox(height: 8,),
+                        // TODO(): add line between
                         Container(
-                        padding: EdgeInsets.all(24),
+                        // padding: EdgeInsets.all(24),
                         child: FutureBuilder(
                           future: _commentStream,
                           builder: (context, snapshot) {
@@ -76,7 +87,7 @@ class PostListScreen extends StatelessWidget {
                           } else if (snapshot.hasData) {
                             final comment = snapshot.data!;
                             return Card(
-                          color: Colors.lightGreen,
+                          color: Colors.white,
                           borderOnForeground: true,
                           elevation: 8,
                           child: ListTile(
@@ -84,9 +95,8 @@ class PostListScreen extends StatelessWidget {
                             trailing:  Text(comment[index]['comment_caption']),
                             subtitle: Row(
                           children: [
-                            Icon(Icons.comment_rounded),
+                            Icon(Icons.thumb_up_sharp),
                             Text(like_number.toString()),
-                            Icon(Icons.thumb_up_sharp)
                           ],
                         ),
                           ),

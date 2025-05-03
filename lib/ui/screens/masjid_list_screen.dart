@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class PostListScreen extends StatelessWidget {
-  const PostListScreen({super.key});
+class MasjidListScreen extends StatelessWidget {
+  const MasjidListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final _postStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
-    final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');    
+    final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');
     // TODO(): investigate why there is a back button on almost every appbar
     return Scaffold(
       appBar: AppBar(

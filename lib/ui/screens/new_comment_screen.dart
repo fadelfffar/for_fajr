@@ -4,14 +4,14 @@ import 'package:for_fajr/ui/ui_widgets/primary_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // passing Input data directly Supabase(immediately shows on public data)
-class NewPostScreen extends StatefulWidget {
-  const NewPostScreen({super.key});
+class NewCommentScreen extends StatefulWidget {
+  const NewCommentScreen({super.key});
 
   @override
-  State<NewPostScreen> createState() => _NewPostScreenState();
+  State<NewCommentScreen> createState() => _NewCommentScreenState();
 }
 
-class _NewPostScreenState extends State<NewPostScreen> {
+class _NewCommentScreenState extends State<NewCommentScreen> {
 
   // MasjidModel that specifies Supabase Data
   late CommentModel data;
