@@ -10,10 +10,7 @@ class PostListScreen extends StatelessWidget {
     List<dynamic> comments = [];
     final _postStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
     // Select 
-    final _commentStreamCount = Supabase.instance.client.from('comment_list')
-        .select()
-        .eq('post_id', 1)
-        .order('comment_id', ascending: true);
+    final _commentStreamCount = Supabase.instance.client.rpc('retrieve_comment');
     final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');
     // TODO(): investigate why there is a back button on almost every appbar
     return Scaffold(
@@ -27,7 +24,7 @@ class PostListScreen extends StatelessWidget {
         toolbarHeight: 40,
         // PreferrezSize make a new widget under appBar by extending it
         // bottom: PreferredSize(
-        //   preferredSize: const Size.fromHeight(10),
+        //   preferredSize: const Size.fromHeight-(10),
         //   child: Text("Post List Screen"),
         // ),
       ),
@@ -97,11 +94,10 @@ class PostListScreen extends StatelessWidget {
                               itemCount: comment.length,
                               itemBuilder: (context, index) {
                                 // TODO(): Figure out how to show different index
-                                return Text(comment[index]['comment_caption']
+                                return Text(comment[index+1]['comment_caption']
                           );
-                        
                           }
-                            );
+                          );
                         }
                         return Text("Error");
                       },
