@@ -9,7 +9,7 @@ class PostListScreen extends StatelessWidget {
     // TODO(): is comments used or not
     List<dynamic> comments = [];
     final _postStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
-    // Select 
+    // Select
     final _commentStreamCount = Supabase.instance.client.rpc('retrieve_comment');
     final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');
     // TODO(): investigate why there is a back button on almost every appbar
@@ -34,7 +34,7 @@ class PostListScreen extends StatelessWidget {
           }, child: Icon(Icons.add),
       ),
       body: Container(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(16),
         child: StreamBuilder<List<Map<String, dynamic>>>(
             stream: _postStream,
             builder: (context, snapshot) {
@@ -51,20 +51,33 @@ class PostListScreen extends StatelessWidget {
                     final int like_number = snapshot.data![index]['like_number'];
                     return Column(
                       children: [
-                        Card(
+                        Text("Explore"),
+                        Container(
+                          padding: EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 16),
                           color: Colors.lightGreen,
-                          borderOnForeground: true,
-                          elevation: 8,
-                          child: ListTile(
-                            title: Text(post[index]['post_title']),
-                            trailing:  Text(post[index]['post_caption']),
-                            subtitle: Row(
-                          children: [
-                            Icon(Icons.comment_rounded),
-                            Text(like_number.toString()),
-                            Icon(Icons.thumb_up_sharp)
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(post[index]['post_title']),
+                              SizedBox(height: 8),
+                              Text(post[index]['post_caption']),
+                              SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  Icon(Icons.comment_rounded),
+                                  SizedBox(width: 4),
+                                  Text(like_number.toString()),
+                                  SizedBox(width: 12),
+                                  //TODO: Make this a IconButton
+                                  Icon(Icons.thumb_up_sharp),
+                                  SizedBox(width: 4),
+                                  Text("Not a button, yet"),
+                                  SizedBox(width: 12),
+                                  Icon(Icons.share),
+                                  Text("Not a button, yet"),
                           ],
                         ),
+                            ],
                           ),
                         ),
                         // TODO(): add line between
@@ -78,30 +91,31 @@ class PostListScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 8,),
                         // TODO(): add line between
-                        Container(
-                        // padding: EdgeInsets.all(24),
-                        child: FutureBuilder(
-                          future: _commentStreamCount,
-                          builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          } else if(snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          } else if (snapshot.hasData) {
-                            final comment = snapshot.data!;
-                            return ListView.builder(
-                              itemCount: comment.length,
-                              itemBuilder: (context, index) {
-                                // TODO(): Figure out how to show different index
-                                return Text(comment[index+1]['comment_caption']
-                          );
-                          }
-                          );
-                        }
-                        return Text("Error");
-                      },
-                    ),),],
+                    //     Container(
+                    //     // padding: EdgeInsets.all(24),
+                    //     child: FutureBuilder(
+                    //       future: _commentStreamCount,
+                    //       builder: (context, snapshot) {
+                    //       if (!snapshot.hasData) {
+                    //         // By default, show a loading spinner.
+                    //         return const CircularProgressIndicator();
+                    //       } else if(snapshot.hasError) {
+                    //         return Text('${snapshot.error}');
+                    //       } else if (snapshot.hasData) {
+                    //         final comment = snapshot.data!;
+                    //         return ListView.builder(
+                    //           itemCount: comment.length,
+                    //           itemBuilder: (context, index) {
+                    //             // TODO(): Figure out how to show different index
+                    //             return Text(comment[index+1]['comment_caption']
+                    //       );
+                    //       }
+                    //       );
+                    //     }
+                    //     return Text("Error");
+                    //   },
+                    // ),),
+                    ],
                   );}
                 );
               };
