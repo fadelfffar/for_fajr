@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:for_fajr/ui/screens/feed_screen.dart' hide NewPostScreen;
 import 'package:for_fajr/ui/screens/login_screen.dart';
 import 'package:for_fajr/ui/screens/masjid_list_screen.dart';
-import 'package:for_fajr/ui/screens/new_comment_screen.dart';
 import 'package:for_fajr/ui/screens/new_masjid_input_screen.dart';
 import 'package:for_fajr/ui/screens/new_post_screen.dart';
 import 'package:for_fajr/ui/screens/post_list_screen.dart';
@@ -55,15 +55,16 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MasjidListScreen(),
-      initialRoute: '/post-list',
+      initialRoute: '/feed',
       routes: {
+        '/feed': (context) => MinimalTextFeedScreen(),
         '/masjid-list': (context) => MasjidListScreen(),
         '/new-masjid': (context) => NewMasjidInputScreen(),
         '/login' : (context) => LoginScreen(),
         '/sign-up' : (context) => SignUpScreen(),
         '/post-list' : (context) => PostListScreen(),
         '/new-post' : (context) => NewPostScreen(),
-        '/new-comment' : (context) => NewCommentScreen(),
+        // '/new-comment' : (context) => NewCommentScreen(),
       },
       title: 'For Fajr',
       theme: ThemeData(
