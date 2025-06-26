@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PostListScreen extends StatefulWidget {
   const PostListScreen({Key? key}) : super(key: key);
@@ -11,6 +12,13 @@ class _PostListScreenState extends State<PostListScreen> {
   final TextEditingController _controller = TextEditingController();
   String _audience = 'Public';
   int _maxChars = 280;
+  // TODO(): is comments used or not
+    List<dynamic> comments = [];
+    final _postStream = Supabase.instance.client.from('post_test').stream(primaryKey: ['id']);
+    // Select
+    final _commentStreamCount = Supabase.instance.client.rpc('retrieve_comment');
+    final _commentStream = Supabase.instance.client.from('comment_list').select('comment_caption');
+    // TODO(): investigate why there is a back button on almost every appbar
 
   bool get _canPost => _controller.text.trim().isNotEmpty && _controller.text.length <= _maxChars;
 
@@ -85,17 +93,38 @@ class _PostListScreenState extends State<PostListScreen> {
               ],
             ),
             const Divider(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    _controller.text,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),
-            ),
+            // Expanded(
+            //   child: SingleChildScrollView(
+            //     child: Container(
+            //       padding: const EdgeInsets.symmetric(vertical: 8),
+            //       child: Text(
+            //         _controller.text,
+            //         style: const TextStyle(fontSize: 16),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            StreamBuilder(
+              stream: _postStream,
+            builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                } else if(snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final comment = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: comment.length,
+                    itemBuilder: (context, index) {
+                      // TODO(): Figure out how to show different index
+                      return Text(comment[index+1]['comment_caption']
+                );
+                }
+                );
+              }
+              return Text("Fetch failed");
+            }),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
