@@ -57,7 +57,7 @@ class _MainAppState extends State<MainApp> {
       home: MasjidListScreen(),
       initialRoute: '/feed',
       routes: {
-        '/feed': (context) => FeedScreen(),
+        '/feed': (context) => NoorConnectApp(),
         '/masjid-list': (context) => MasjidListScreen(),
         '/new-masjid': (context) => NewMasjidInputScreen(),
         '/login' : (context) => LoginScreen(),
