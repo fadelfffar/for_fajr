@@ -500,27 +500,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               ),
             ),
             
-            // Tab Bar
-            Container(
-              color: Colors.white,
-              child: TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                labelColor: Color(0xFF004D40),
-                unselectedLabelColor: Colors.grey[600],
-                indicatorColor: Color(0xFF004D40),
-                indicatorWeight: 3,
-                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                tabs: [
-                  Tab(text: 'Timeline'),
-                  Tab(text: 'Quran'),
-                  Tab(text: 'Hadith'),
-                  Tab(text: 'Community'),
-                  Tab(text: 'Dhikr'),
-                ],
-              ),
-            ),
-            
             // Content
             Expanded(
               child: TabBarView(
