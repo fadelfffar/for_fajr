@@ -1485,11 +1485,6 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showCreatePostDialog(context),
-        backgroundColor: Color(0xFF004D40),
-        child: Icon(Icons.edit, color: Colors.white),
-      ),
     );
   }
 
