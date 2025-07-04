@@ -205,6 +205,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 45,
       discussions: 67,
       isReacted: false,
+      postType: 'Dhikr',
       profileColor: Colors.deepPurple,
     ),
     IslamicPost(
@@ -217,6 +218,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 78,
       discussions: 34,
       isReacted: true,
+      postType: 'Reflection',
       profileColor: Colors.pink,
     ),
     IslamicPost(
@@ -229,6 +231,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 123,
       discussions: 89,
       isReacted: false,
+      postType: 'Hadith',
       profileColor: Colors.indigo,
     ),
     IslamicPost(
@@ -241,6 +244,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 97,
       discussions: 156,
       isReacted: true,
+      postType: 'Learning',
       profileColor: Colors.green,
     ),
     IslamicPost(
@@ -253,6 +257,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 62,
       discussions: 103,
       isReacted: false,
+      postType: 'Personal',
       profileColor: Colors.orange,
     ),
   ];
@@ -386,11 +391,22 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Hidden Container for button Alignment, option: wrap button into Container and add padding horizontal 12 and vertical 6
                               Row(
                                 children: [
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF004D40).withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Text(
+                                      '#Inspiration',
+                                      style: TextStyle(
+                                        color: Color(0xFF004D40),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -419,6 +435,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                             shares: 0,
                                             discussions: 0,
                                             isReacted: false,
+                                            postType: 'Personal',
                                             profileColor: Colors.teal,
                                           ));
                                           _newPostController.clear();
@@ -489,26 +506,26 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               ),
             ),
             
-            // Category Tab Bar
-            // Container(
-            //   color: Colors.white,
-            //   child: TabBar(
-            //     controller: _tabController,
-            //     isScrollable: true,
-            //     labelColor: Color(0xFF004D40),
-            //     unselectedLabelColor: Colors.grey[600],
-            //     indicatorColor: Color(0xFF004D40),
-            //     indicatorWeight: 3,
-            //     labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            //     tabs: [
-            //       Tab(text: 'Timeline'),
-            //       Tab(text: 'Quran'),
-            //       Tab(text: 'Hadith'),
-            //       Tab(text: 'Community'),
-            //       Tab(text: 'Dhikr'),
-            //     ],
-            //   ),
-            // ),
+            // Tab Bar
+            Container(
+              color: Colors.white,
+              child: TabBar(
+                controller: _tabController,
+                isScrollable: true,
+                labelColor: Color(0xFF004D40),
+                unselectedLabelColor: Colors.grey[600],
+                indicatorColor: Color(0xFF004D40),
+                indicatorWeight: 3,
+                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                tabs: [
+                  Tab(text: 'Timeline'),
+                  Tab(text: 'Quran'),
+                  Tab(text: 'Hadith'),
+                  Tab(text: 'Community'),
+                  Tab(text: 'Dhikr'),
+                ],
+              ),
+            ),
             
             // Content
             Expanded(
@@ -516,6 +533,10 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                 controller: _tabController,
                 children: [
                   _buildTimelineFeed(),
+                  _buildCategoryFeed('Quran'),
+                  _buildCategoryFeed('Hadith'),
+                  _buildCategoryFeed('Learning'),
+                  _buildCategoryFeed('Dhikr'),
                 ],
               ),
             ),
@@ -553,6 +574,26 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildCategoryFeed(String category) {
+    final filteredPosts = allPosts.where((post) => post.postType == category).toList();
+    
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      itemCount: filteredPosts.length,
+      itemBuilder: (context, index) {
+        return IslamicPostCard(
+          post: filteredPosts[index],
+          onReact: () {
+            setState(() {
+              filteredPosts[index].isReacted = !filteredPosts[index].isReacted;
+              filteredPosts[index].reactions += filteredPosts[index].isReacted ? 1 : -1;
+            });
+          },
+        );
+      },
     );
   }
 
@@ -636,6 +677,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                     shares: 0,
                                     discussions: 0,
                                     isReacted: false,
+                                    postType: 'Personal',
                                     profileColor: Colors.teal,
                                   ));
                                   _thoughtController.clear();
@@ -935,6 +977,7 @@ class SavedScreen extends StatelessWidget {
       shares: 234,
       discussions: 123,
       isReacted: true,
+      postType: 'Quran',
       profileColor: Colors.indigo,
     ),
     IslamicPost(
@@ -947,6 +990,7 @@ class SavedScreen extends StatelessWidget {
       shares: 178,
       discussions: 89,
       isReacted: true,
+      postType: 'Hadith',
       profileColor: Colors.purple,
     ),
   ];
@@ -1441,6 +1485,11 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showCreatePostDialog(context),
+        backgroundColor: Color(0xFF004D40),
+        child: Icon(Icons.edit, color: Colors.white),
+      ),
     );
   }
 
@@ -1829,6 +1878,31 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     );
   }
 
+  void _showCreatePostDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Create New Post'),
+        content: Text('Create a new Islamic post to share with the community.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // Handle create post logic
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF004D40),
+            ),
+            child: Text('Create', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
 
   // Handler methods for profile options
   void _handleEditProfile(BuildContext context) {
@@ -2045,6 +2119,14 @@ class _IslamicPostCardState extends State<IslamicPostCard>
                                     color: widget.post.profileColor.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
+                                  child: Text(
+                                    widget.post.postType,
+                                    style: TextStyle(
+                                      color: widget.post.profileColor,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -2171,6 +2253,7 @@ class IslamicPost {
   final int shares;
   final int discussions;
   bool isReacted;
+  final String postType;
   final Color profileColor;
 
   IslamicPost({
@@ -2183,6 +2266,7 @@ class IslamicPost {
     required this.shares,
     required this.discussions,
     required this.isReacted,
+    required this.postType,
     required this.profileColor,
   });
 }
