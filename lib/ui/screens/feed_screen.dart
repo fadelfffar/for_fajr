@@ -205,7 +205,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 45,
       discussions: 67,
       isReacted: false,
-      postType: 'Dhikr',
       profileColor: Colors.deepPurple,
     ),
     IslamicPost(
@@ -218,7 +217,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 78,
       discussions: 34,
       isReacted: true,
-      postType: 'Reflection',
       profileColor: Colors.pink,
     ),
     IslamicPost(
@@ -231,7 +229,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 123,
       discussions: 89,
       isReacted: false,
-      postType: 'Hadith',
       profileColor: Colors.indigo,
     ),
     IslamicPost(
@@ -244,7 +241,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 97,
       discussions: 156,
       isReacted: true,
-      postType: 'Learning',
       profileColor: Colors.green,
     ),
     IslamicPost(
@@ -257,7 +253,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 62,
       discussions: 103,
       isReacted: false,
-      postType: 'Personal',
       profileColor: Colors.orange,
     ),
   ];
@@ -435,7 +430,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                             shares: 0,
                                             discussions: 0,
                                             isReacted: false,
-                                            postType: 'Personal',
                                             profileColor: Colors.teal,
                                           ));
                                           _newPostController.clear();
@@ -653,7 +647,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                     shares: 0,
                                     discussions: 0,
                                     isReacted: false,
-                                    postType: 'Personal',
                                     profileColor: Colors.teal,
                                   ));
                                   _thoughtController.clear();
@@ -953,7 +946,6 @@ class SavedScreen extends StatelessWidget {
       shares: 234,
       discussions: 123,
       isReacted: true,
-      postType: 'Quran',
       profileColor: Colors.indigo,
     ),
     IslamicPost(
@@ -966,7 +958,6 @@ class SavedScreen extends StatelessWidget {
       shares: 178,
       discussions: 89,
       isReacted: true,
-      postType: 'Hadith',
       profileColor: Colors.purple,
     ),
   ];
@@ -2058,21 +2049,6 @@ class _IslamicPostCardState extends State<IslamicPostCard>
                                   ),
                                 ),
                                 SizedBox(width: 6),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: widget.post.profileColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    widget.post.postType,
-                                    style: TextStyle(
-                                      color: widget.post.profileColor,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                             Text(
