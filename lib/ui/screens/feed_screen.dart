@@ -1873,32 +1873,6 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     );
   }
 
-  void _showCreatePostDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Create New Post'),
-        content: Text('Create a new Islamic post to share with the community.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Handle create post logic
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF004D40),
-            ),
-            child: Text('Create', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
-
   // Handler methods for profile options
   void _handleEditProfile(BuildContext context) {
     Navigator.pop(context);
