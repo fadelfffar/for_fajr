@@ -533,10 +533,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                 controller: _tabController,
                 children: [
                   _buildTimelineFeed(),
-                  _buildCategoryFeed('Quran'),
-                  _buildCategoryFeed('Hadith'),
-                  _buildCategoryFeed('Learning'),
-                  _buildCategoryFeed('Dhikr'),
                 ],
               ),
             ),
@@ -574,26 +570,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildCategoryFeed(String category) {
-    final filteredPosts = allPosts.where((post) => post.postType == category).toList();
-    
-    return ListView.builder(
-      padding: EdgeInsets.all(16),
-      itemCount: filteredPosts.length,
-      itemBuilder: (context, index) {
-        return IslamicPostCard(
-          post: filteredPosts[index],
-          onReact: () {
-            setState(() {
-              filteredPosts[index].isReacted = !filteredPosts[index].isReacted;
-              filteredPosts[index].reactions += filteredPosts[index].isReacted ? 1 : -1;
-            });
-          },
-        );
-      },
     );
   }
 
