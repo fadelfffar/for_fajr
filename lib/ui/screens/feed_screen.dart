@@ -2198,7 +2198,6 @@ class IslamicPost {
   final int shares;
   final int discussions;
   bool isReacted;
-  final String postType;
   final Color profileColor;
 
   IslamicPost({
@@ -2211,7 +2210,6 @@ class IslamicPost {
     required this.shares,
     required this.discussions,
     required this.isReacted,
-    required this.postType,
     required this.profileColor,
   });
 }
