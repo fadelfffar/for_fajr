@@ -987,22 +987,6 @@ class SavedScreen extends StatelessWidget {
             ),
           ),
           
-          // Filter Tabs
-          Container(
-            height: 50,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                _buildFilterChip('All', true),
-                _buildFilterChip('Quran', false),
-                _buildFilterChip('Hadith', false),
-                _buildFilterChip('Dhikr', false),
-                _buildFilterChip('Personal', false),
-              ],
-            ),
-          ),
-          
           // Saved Posts List
           Expanded(
             child: ListView.builder(
@@ -1045,22 +1029,6 @@ class SavedScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterChip(String label, bool isSelected) {
-    return Container(
-      margin: EdgeInsets.only(right: 8),
-      child: FilterChip(
-        label: Text(label),
-        selected: isSelected,
-        onSelected: (bool selected) {},
-        selectedColor: Color(0xFF004D40).withOpacity(0.2),
-        checkmarkColor: Color(0xFF004D40),
-        labelStyle: TextStyle(
-          color: isSelected ? Color(0xFF004D40) : Colors.grey[600],
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-    );
-  }
 }
 
 // Notifications Screen
