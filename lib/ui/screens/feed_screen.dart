@@ -986,6 +986,7 @@ class SavedScreen extends StatelessWidget {
           ),
           
           // Saved Posts List
+          // TODO(): review and remove coloring on  ProfilePicture based on category label coloring
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.all(16),
