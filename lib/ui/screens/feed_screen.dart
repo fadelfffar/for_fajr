@@ -981,7 +981,8 @@ class SavedScreen extends StatelessWidget {
                 Container(width: 1, height: 40, color: Colors.grey[300]),
                 _buildStatItem('This Month', '12', Icons.calendar_today),
                 Container(width: 1, height: 40, color: Colors.grey[300]),
-                _buildStatItem('Categories', '4', Icons.category),
+                //TODO(): remove categories
+                //TODO(): review _showCreatePost usage
               ],
             ),
           ),
