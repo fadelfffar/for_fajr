@@ -986,7 +986,7 @@ class SavedScreen extends StatelessWidget {
           ),
           
           // Saved Posts List
-          // TODO(): review and remove coloring on  ProfilePicture based on category label coloring
+          // TODO(): review and remove coloring on  ProfilePicture, result: standarize coloring with template or stick with current user selected color based on IslamicPostCard model
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.all(16),
