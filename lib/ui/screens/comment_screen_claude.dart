@@ -216,7 +216,7 @@ class _CommentScreenState extends State<CommentScreen> with TickerProviderStateM
       ),
       body: Column(
         children: [
-          // Original Post Header
+          // AUthor Post Header
           Container(
             color: Colors.white,
             child: Column(
@@ -267,7 +267,7 @@ class _CommentScreenState extends State<CommentScreen> with TickerProviderStateM
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                   child: Row(
                     children: [
                       Icon(Icons.comment, color: Color(0xFF004D40), size: 16),

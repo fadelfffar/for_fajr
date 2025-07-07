@@ -2049,7 +2049,10 @@ class _IslamicPostCardState extends State<IslamicPostCard>
                         icon: Icons.chat_bubble_outline,
                         count: widget.post.discussions,
                         color: Colors.grey[600]!,
-                        onTap: () {},
+                        onTap: () {
+                          // TODO(): route to comment screen
+                          Navigator.pushNamed(context, '/comment');
+                        },
                       ),
                       SizedBox(width: 20),
                       _buildEngagementButton(

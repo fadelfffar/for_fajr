@@ -56,7 +56,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MasjidListScreen(),
-      initialRoute: '/comment',
+      initialRoute: '/feed',
       routes: {
         '/feed': (context) => NoorConnectApp(),
         '/masjid-list': (context) => MasjidListScreen(),
