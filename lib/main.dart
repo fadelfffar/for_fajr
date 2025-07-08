@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:for_fajr/ui/screens/comment_screen_claude.dart';
 import 'package:for_fajr/ui/screens/feed_screen.dart' hide NewPostScreen;
 import 'package:for_fajr/ui/screens/login_screen.dart';
-import 'package:for_fajr/ui/screens/masjid_list_screen.dart';
-import 'package:for_fajr/ui/screens/new_masjid_input_screen.dart';
 import 'package:for_fajr/ui/screens/new_post_screen.dart';
 import 'package:for_fajr/ui/screens/post_list_screen.dart';
 import 'package:for_fajr/ui/screens/sign_up_screen.dart';
@@ -55,18 +53,18 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MasjidListScreen(),
-      initialRoute: '/feed',
+      home: NoorConnectApp(),
+      initialRoute: '/comment',
       routes: {
         '/feed': (context) => NoorConnectApp(),
-        '/masjid-list': (context) => MasjidListScreen(),
-        '/new-masjid': (context) => NewMasjidInputScreen(),
         '/login' : (context) => LoginScreen(),
-        '/comment' : (context) => CommentScreen(postId: '1', postAuthor: 'Sister Khadijah', postContent:  'SubhanAllah! This is such a beautiful reminder. May Allah reward you for sharing this beneficial content. Ameen! 🤲',),
+        '/comment' : (context) => CommentScreenV1(postId: '1', postAuthor: 'Sister Khadijah', postContent:  'SubhanAllah! This is such a beautiful reminder. May Allah reward you for sharing this beneficial content. Ameen! 🤲',),
         '/sign-up' : (context) => SignUpScreen(),
         '/post-list' : (context) => PostListScreen(),
         '/new-post' : (context) => NewPostScreen(),
         // '/new-comment' : (context) => NewCommentScreen(),
+        // TODO(): add event list screen
+        // TODO(): add event input screen
       },
       title: 'For Fajr',
       theme: ThemeData(
