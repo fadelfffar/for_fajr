@@ -194,8 +194,8 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   final TextEditingController _newPostController = TextEditingController();
   bool _showCreatePost = false;
   
-  List<IslamicPost> allPosts = [
-    IslamicPost(
+  List<PostModel> allPosts = [
+    PostModel(
       id: '1',
       author: 'Hafiz Mahmoud',
       username: 'hafiz_mahmoud',
@@ -205,21 +205,19 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 45,
       discussions: 67,
       isReacted: false,
-      profileColor: Colors.deepPurple,
     ),
-    IslamicPost(
+    PostModel(
       id: '2',
       author: 'Sister Maryam',
       username: 'maryam_guidance',
-      content: 'Just finished reading Surah Al-Mulk before sleeping. The peace it brings to the heart is indescribable. May Allah protect us all through the night and grant us forgiveness. SubhanAllah for the blessing of the Quran! 📖✨',
+      content: 'Just  reading Surah Al-Mulk before sleeping. The peace it brings to the heart is indescribable. May Allah protect us all through the night and grant us forgiveness. SubhanAllah for the blessing of the Quran! 📖✨',
       timestamp: DateTime.now().subtract(Duration(hours: 1)),
       reactions: 189,
       shares: 78,
       discussions: 34,
       isReacted: true,
-      profileColor: Colors.pink,
     ),
-    IslamicPost(
+    PostModel(
       id: '3',
       author: 'Dr. Yusuf Ahmed',
       username: 'dr_yusuf',
@@ -229,9 +227,8 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 123,
       discussions: 89,
       isReacted: false,
-      profileColor: Colors.indigo,
     ),
-    IslamicPost(
+    PostModel(
       id: '4',
       author: 'Ustadh Bilal',
       username: 'ustadh_bilal',
@@ -241,9 +238,8 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 97,
       discussions: 156,
       isReacted: true,
-      profileColor: Colors.green,
     ),
-    IslamicPost(
+    PostModel(
       id: '5',
       author: 'Muslimah Diary',
       username: 'muslimah_stories',
@@ -253,7 +249,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       shares: 62,
       discussions: 103,
       isReacted: false,
-      profileColor: Colors.orange,
     ),
   ];
 
@@ -420,7 +415,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                     onPressed: () {
                                       if (_newPostController.text.isNotEmpty) {
                                         setState(() {
-                                          allPosts.insert(0, IslamicPost(
+                                          allPosts.insert(0, PostModel(
                                             id: DateTime.now().toString(),
                                             author: 'You',
                                             username: 'your_username',
@@ -430,7 +425,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                             shares: 0,
                                             discussions: 0,
                                             isReacted: false,
-                                            profileColor: Colors.teal,
                                           ));
                                           _newPostController.clear();
                                           _showCreatePost = false;
@@ -532,7 +526,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
         padding: EdgeInsets.all(16),
         itemCount: allPosts.length,
         itemBuilder: (context, index) {
-          return IslamicPostCard(
+          return PostModelCard(
             post: allPosts[index],
             onReact: () {
               setState(() {
@@ -616,7 +610,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                             onPressed: () {
                               if (_thoughtController.text.isNotEmpty) {
                                 setState(() {
-                                  allPosts.insert(0, IslamicPost(
+                                  allPosts.insert(0, PostModel(
                                     id: DateTime.now().toString(),
                                     author: 'You',
                                     username: 'your_username',
@@ -626,7 +620,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                     shares: 0,
                                     discussions: 0,
                                     isReacted: false,
-                                    profileColor: Colors.teal,
                                   ));
                                   _thoughtController.clear();
                                 });
@@ -914,8 +907,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
 // Saved Screen
 class SavedScreen extends StatelessWidget {
-  final List<IslamicPost> savedPosts = [
-    IslamicPost(
+  final List<PostModel> savedPosts = [
+    PostModel(
       id: 's1',
       author: 'Dr. Yusuf Ahmed',
       username: 'dr_yusuf',
@@ -925,9 +918,8 @@ class SavedScreen extends StatelessWidget {
       shares: 234,
       discussions: 123,
       isReacted: true,
-      profileColor: Colors.indigo,
     ),
-    IslamicPost(
+    PostModel(
       id: 's2',
       author: 'Sister Aisha',
       username: 'aisha_reflections',
@@ -937,7 +929,6 @@ class SavedScreen extends StatelessWidget {
       shares: 178,
       discussions: 89,
       isReacted: true,
-      profileColor: Colors.purple,
     ),
   ];
 
@@ -986,13 +977,13 @@ class SavedScreen extends StatelessWidget {
           ),
           
           // Saved Posts List
-          // TODO(): review and remove coloring on  ProfilePicture, result: standarize coloring with template or stick with current user selected color based on IslamicPostCard model
+          // TODO(): review and remove coloring on  ProfilePicture, result: standarize coloring with template or stick with current user selected color based on PostModelCard model
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.all(16),
               itemCount: savedPosts.length,
               itemBuilder: (context, index) {
-                return IslamicPostCard(
+                return PostModelCard(
                   post: savedPosts[index],
                   onReact: () {},
                 );
@@ -1900,17 +1891,17 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
 }
 
 // Islamic Post Card (Enhanced)
-class IslamicPostCard extends StatefulWidget {
-  final IslamicPost post;
+class PostModelCard extends StatefulWidget {
+  final PostModel post;
   final VoidCallback onReact;
 
-  IslamicPostCard({required this.post, required this.onReact});
+  PostModelCard({required this.post, required this.onReact});
 
   @override
-  _IslamicPostCardState createState() => _IslamicPostCardState();
+  _PostModelCardState createState() => _PostModelCardState();
 }
 
-class _IslamicPostCardState extends State<IslamicPostCard> 
+class _PostModelCardState extends State<PostModelCard> 
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
@@ -1965,15 +1956,15 @@ class _IslamicPostCardState extends State<IslamicPostCard>
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: widget.post.profileColor.withOpacity(0.1),
+                          // TODO(): put transparent color that show profile name or picture
                           borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: widget.post.profileColor.withOpacity(0.3)),
+                          border: Border.all(color: Colors.lightGreen),
                         ),
                         child: Center(
                           child: Text(
                             widget.post.author.split(' ').map((n) => n[0]).take(2).join().toUpperCase(),
                             style: TextStyle(
-                              color: widget.post.profileColor,
+                              color: Colors.lightGreen,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -2114,7 +2105,7 @@ class _IslamicPostCardState extends State<IslamicPostCard>
 }
 
 // Data Models
-class IslamicPost {
+class PostModel {
   final String id;
   final String author;
   final String username;
@@ -2124,9 +2115,8 @@ class IslamicPost {
   final int shares;
   final int discussions;
   bool isReacted;
-  final Color profileColor;
 
-  IslamicPost({
+  PostModel({
     required this.id,
     required this.author,
     required this.username,
@@ -2136,7 +2126,6 @@ class IslamicPost {
     required this.shares,
     required this.discussions,
     required this.isReacted,
-    required this.profileColor,
   });
 }
 

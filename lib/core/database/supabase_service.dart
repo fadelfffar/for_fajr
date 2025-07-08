@@ -20,6 +20,5 @@ class SupabaseService {
         .from('masjid')
         .select('masjid_name');
     return response;
-    debugPrint("fetch data success");
   }
 }

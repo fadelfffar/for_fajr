@@ -54,7 +54,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: NoorConnectApp(),
-      initialRoute: '/comment',
+      initialRoute: '/feed',
       routes: {
         '/feed': (context) => NoorConnectApp(),
         '/login' : (context) => LoginScreen(),
