@@ -8,8 +8,8 @@ class IslamicComment {
   final DateTime timestamp;
   final int reactions;
   final bool isReacted;
+  // TODO(): delete profileColor as you cannot have color datatype on supabase, option: remove it entirely or make a template color that user can choose from but make it so the data only stay within the app
   final Color profileColor;
-  final List<IslamicComment> replies;
 
   IslamicComment({
     required this.id,
@@ -20,7 +20,6 @@ class IslamicComment {
     required this.reactions,
     required this.isReacted,
     required this.profileColor,
-    this.replies = const [],
   });
 }
 
