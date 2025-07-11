@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:for_fajr/ui/screens/comment_screen_claude.dart';
-import 'package:for_fajr/ui/screens/feed_screen.dart' hide NewPostScreen, PostModel;
+import 'package:for_fajr/ui/screens/feed_screen.dart' hide NewPostScreen;
 import 'package:for_fajr/ui/screens/login_screen.dart';
 import 'package:for_fajr/ui/screens/new_post_screen.dart';
 import 'package:for_fajr/ui/screens/post_list_screen.dart';
@@ -54,19 +54,11 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: NoorConnectApp(),
-      initialRoute: '/comment',
+      initialRoute: '/feed',
       routes: {
         '/feed': (context) => NoorConnectApp(),
         '/login' : (context) => LoginScreen(),
-        '/comment' : (context) => CommentScreen(post: PostModel(id: '1',
-      author: 'Hafiz Mahmoud',
-      username: 'hafiz_mahmoud',
-      content: 'La hawla wa la quwwata illa billah - There is no power except with Allah. When life gets overwhelming, remember that Allah is always in control. Trust His wisdom and timing. 🤲',
-      timestamp: DateTime.now().subtract(Duration(minutes: 15)),
-      reactions: 234,
-      shares: 45,
-      discussions: 67,
-      isReacted: false, profileColor: Colors.lightGreenAccent,),),
+        '/comment' : (context) => CommentScreenV1(postId: '1', postAuthor: 'Sister Khadijah', postContent:  'SubhanAllah! This is such a beautiful reminder. May Allah reward you for sharing this beneficial content. Ameen! 🤲',),
         '/sign-up' : (context) => SignUpScreen(),
         '/post-list' : (context) => PostListScreen(),
         '/new-post' : (context) => NewPostScreen(),

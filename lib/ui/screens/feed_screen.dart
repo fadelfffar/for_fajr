@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
   runApp(NoorConnectApp());
@@ -193,6 +194,12 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   final TextEditingController _thoughtController = TextEditingController();
   final TextEditingController _newPostController = TextEditingController();
   bool _showCreatePost = false;
+
+  // List to store posts
+  List<Map<String, dynamic>> _posts = [];
+  
+  // Loading state
+  bool _isLoading = true;
   
   List<PostModel> allPosts = [
     PostModel(
@@ -256,6 +263,29 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
+    _fetchPosts;
+  }
+
+  Future<void> _fetchPosts() async {
+    try {
+      // Fetch all posts, order by created_at descending
+      final response = await Supabase.instance.client
+          .from('posts')
+          .select('*')
+          .order('created_at', ascending: false);
+
+      setState(() {
+        _posts = (response as List).cast<Map<String, dynamic>>();
+        _isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching posts response: $error')),
+      );
+    }
   }
 
   @override
@@ -499,7 +529,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildTimelineFeed(),
+                  _buildTimelineFeed(_posts),
                 ],
               ),
             ),
@@ -516,7 +546,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildTimelineFeed() {
+  Widget _buildTimelineFeed(dynamic _posts) {
     return RefreshIndicator(
       onRefresh: () async {
         await Future.delayed(Duration(seconds: 1));
@@ -524,10 +554,11 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       },
       child: ListView.builder(
         padding: EdgeInsets.all(16),
-        itemCount: allPosts.length,
+        itemCount: _posts.length,
         itemBuilder: (context, index) {
+          final post = _posts[index];
           return PostModelCard(
-            post: allPosts[index],
+            post: _posts[index],
             onReact: () {
               setState(() {
                 allPosts[index].isReacted = !allPosts[index].isReacted;
@@ -2042,6 +2073,7 @@ class _PostModelCardState extends State<PostModelCard>
                         color: Colors.grey[600]!,
                         onTap: () {
                           // TODO(): route to comment screen
+                          // TODO(): nest comment screen navigator to only on comment screen, not using pushNamed and routing on main.dart
                           Navigator.pushNamed(context, '/comment');
                         },
                       ),
