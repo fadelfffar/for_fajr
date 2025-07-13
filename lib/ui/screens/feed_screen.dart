@@ -303,7 +303,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final response = Supabase.instance.client
+    final _response = Supabase.instance.client
           .from('posts')
           .select('*')
           .order('created_at', ascending: false)
@@ -562,10 +562,20 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
         await Future.delayed(Duration(seconds: 1));
         setState(() {});
       },
-      child: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: _posts.length,
-        itemBuilder: (context, index) {
+      child: StreamBuilder<List<Map<String, dynamic>>>(
+         stream: _posts,
+         builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              } else if(snapshot.hasError) {
+                return Text('${snapshot.error}');
+              } else if (snapshot.hasData) {
+                final post = snapshot.data!;
+                return ListView.builder(
+                  padding: EdgeInsets.all(16),
+                  itemCount: _posts.length,
+                  itemBuilder: (context, index) {
           final post = _posts[index];
           return PostModelCard(
             post: _posts[index],
@@ -577,6 +587,10 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
             },
           );
         },
+                );
+              }
+              return Text("you failed");
+         },
       ),
     );
   }
