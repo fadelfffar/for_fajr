@@ -571,8 +571,8 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
             post: _posts[index],
             onReact: () {
               setState(() {
-                post[index].isReacted = !post[index].isReacted;
-                post[index].reactions += post[index].isReacted ? 1 : -1;
+                post[index]['is_reacted'] = !post[index].isReacted;
+                post[index]['reactions'] += post[index].isReacted ? 1 : -1;
               });
             },
           );
