@@ -273,8 +273,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       // Fetch all posts, order by created_at descending
       final response = await Supabase.instance.client
           .from('posts')
-          .select('*')
-          .order('created_at', ascending: false);
+          .select('*');
           //TODO(): possible error on response json serialization
       setState(() {
         _posts = (response as List).cast<Map<String, dynamic>>();
@@ -303,11 +302,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final _response = Supabase.instance.client
-          .from('posts')
-          .select('*')
-          .order('created_at', ascending: false)
-          .asStream();
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
       body: NestedScrollView(
@@ -539,7 +533,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildTimelineFeed(_posts),
+                  _buildTimelineFeed(),
                 ],
               ),
             ),
@@ -556,14 +550,18 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildTimelineFeed(dynamic _posts) {
+  Widget _buildTimelineFeed() {
+    final _response = Supabase.instance.client
+          .from('posts')
+          .select('*')
+          .asStream();
     return RefreshIndicator(
       onRefresh: () async {
         await Future.delayed(Duration(seconds: 1));
         setState(() {});
       },
       child: StreamBuilder<List<Map<String, dynamic>>>(
-         stream: _posts,
+         stream: _response,
          builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 // By default, show a loading spinner.
@@ -577,15 +575,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                   itemCount: _posts.length,
                   itemBuilder: (context, index) {
           final post = _posts[index];
-          return PostModelCard(
-            post: _posts[index],
-            onReact: () {
-              setState(() {
-                post[index]['is_reacted'] = !post[index].isReacted;
-                post[index]['reactions'] += post[index].isReacted ? 1 : -1;
-              });
-            },
-          );
+          return Text((post[index]['content']));
         },
                 );
               }
