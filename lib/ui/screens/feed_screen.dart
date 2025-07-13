@@ -273,7 +273,8 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       // Fetch all posts, order by created_at descending
       final response = await Supabase.instance.client
           .from('posts')
-          .select('*');
+          .select('*')
+          .order('created_at', ascending: false);
           //TODO(): possible error on response json serialization
       setState(() {
         _posts = (response as List).cast<Map<String, dynamic>>();
@@ -302,6 +303,11 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final _response = Supabase.instance.client
+          .from('posts')
+          .select('*')
+          .order('created_at', ascending: false)
+          .asStream();
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
       body: NestedScrollView(
@@ -533,7 +539,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildTimelineFeed(),
+                  _buildTimelineFeed(_posts),
                 ],
               ),
             ),
@@ -550,38 +556,38 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildTimelineFeed() {
-    final _response = Supabase.instance.client
-          .from('posts')
-          .select('*')
-          .asStream();
+  Widget _buildTimelineFeed(dynamic _posts) {
     return RefreshIndicator(
       onRefresh: () async {
         await Future.delayed(Duration(seconds: 1));
         setState(() {});
       },
       child: StreamBuilder<List<Map<String, dynamic>>>(
-         stream: _response,
-         builder: (context, snapshot) {
-              if (snapshot.hasData) {
+         stream: _posts,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
                 // By default, show a loading spinner.
                 return const CircularProgressIndicator();
               } else if(snapshot.hasError) {
                 return Text('${snapshot.error}');
               } else if (snapshot.hasData) {
                 final post = snapshot.data!;
-                return ListView.builder(
-                  padding: EdgeInsets.all(16),
-                  itemCount: _posts.length,
-                  itemBuilder: (context, index) {
+      ListView.builder(
+        padding: EdgeInsets.all(16),
+        itemCount: _posts.length,
+        itemBuilder: (context, index) {
           final post = _posts[index];
-          return Text((post[index]['content']));
+          return PostModelCard(
+            post: _posts[index],
+            onReact: () {
+              setState(() {
+                post[index]['is_reacted'] = !post[index].isReacted;
+                post[index]['reactions'] += post[index].isReacted ? 1 : -1;
+              });
+            },
+          );
         },
-                );
-              }
-              return Text("you failed");
-         },
-      ),
+      ),),
     );
   }
 
