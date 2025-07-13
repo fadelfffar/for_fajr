@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -271,12 +273,14 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       // Fetch all posts, order by created_at descending
       final response = await Supabase.instance.client
           .from('posts')
-          .select('*')
-          .order('created_at', ascending: false);
-
+          .select('*');
+          //TODO(): possible error on response json serialization
       setState(() {
         _posts = (response as List).cast<Map<String, dynamic>>();
         _isLoading = false;
+        print('please write some word to continue');
+        String? word = stdin.readLineSync();
+        print('your word is: $word ,Fetched posts: $response');
       });
     } catch (error) {
       setState(() {
@@ -529,7 +533,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildTimelineFeed(_posts),
+                  _buildTimelineFeed(),
                 ],
               ),
             ),
@@ -546,27 +550,37 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildTimelineFeed(dynamic _posts) {
+  Widget _buildTimelineFeed() {
+    final _response = Supabase.instance.client
+          .from('posts')
+          .select('*')
+          .asStream();
     return RefreshIndicator(
       onRefresh: () async {
         await Future.delayed(Duration(seconds: 1));
         setState(() {});
       },
-      child: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: _posts.length,
-        itemBuilder: (context, index) {
+      child: StreamBuilder<List<Map<String, dynamic>>>(
+         stream: _response,
+         builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              } else if(snapshot.hasError) {
+                return Text('${snapshot.error}');
+              } else if (snapshot.hasData) {
+                final post = snapshot.data!;
+                return ListView.builder(
+                  padding: EdgeInsets.all(16),
+                  itemCount: _posts.length,
+                  itemBuilder: (context, index) {
           final post = _posts[index];
-          return PostModelCard(
-            post: _posts[index],
-            onReact: () {
-              setState(() {
-                allPosts[index].isReacted = !allPosts[index].isReacted;
-                allPosts[index].reactions += allPosts[index].isReacted ? 1 : -1;
-              });
-            },
-          );
+          return Text((post[index]['content']));
         },
+                );
+              }
+              return Text("you failed");
+         },
       ),
     );
   }
@@ -2159,6 +2173,35 @@ class PostModel {
     required this.discussions,
     required this.isReacted,
   });
+  // Factory constructor for JSON deserialization
+  factory PostModel.fromJson(Map<String, dynamic> json) {
+    return PostModel(
+      id: json['id'] as String,
+      author: json['author'] as String,
+      username: json['username'] as String,
+      content: json['content'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      reactions: json['reactions'] as int,
+      shares: json['shares'] as int,
+      discussions: json['discussions'] as int,
+      isReacted: json['is_reacted'] as bool? ?? false,
+    );
+  }
+
+  // Convert to JSON for database operations
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'author': author,
+      'username': username,
+      'content': content,
+      'timestamp': timestamp.toIso8601String(),
+      'reactions': reactions,
+      'shares': shares,
+      'discussions': discussions,
+      'is_reacted': isReacted,
+    };
+  }
 }
 
 class NotificationItem {
