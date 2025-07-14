@@ -588,7 +588,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                       Text(post['content']),
                       SizedBox(height: 8),
                       Text(
-                        'by ${post['author_id']}',
+                        'by ${post['author']}',
                         style: TextStyle(
                           color: Colors.grey,
                         ),
