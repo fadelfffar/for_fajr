@@ -194,8 +194,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   final TextEditingController _thoughtController = TextEditingController();
   final TextEditingController _newPostController = TextEditingController();
   bool _showCreatePost = false;
-
-  
+  late PostModel? data;
   // Loading state
   bool _isLoading = true;
   
@@ -261,6 +260,17 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
+    data = PostModel(
+      id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
+      author: 'Hafiz Mahmoud',
+      username: 'hafiz_mahmoud',
+      content: 'La hawla wa la quwwata illa billah - There is no power except with Allah. When life gets overwhelming, remember that Allah is always in control. Trust His wisdom and timing. 🤲',
+      timestamp: DateTime.now().subtract(Duration(minutes: 15)),
+      reactions: 234,
+      shares: 45,
+      discussions: 67,
+      isReacted: false,
+    );
     // _fetchPosts;
   }
 
@@ -401,6 +411,9 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                         children: [
                           TextField(
                             controller: _newPostController,
+                            onChanged: (value) {
+                              data!.content = value;
+                            },
                             maxLines: 4,
                             decoration: InputDecoration(
                               hintText: 'What\'s on your mind? Share something beneficial...',
@@ -442,20 +455,33 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                     child: Text('Cancel', style: TextStyle(color: Colors.grey)),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (_newPostController.text.isNotEmpty) {
-                                        setState(() {
-                                          allPosts.insert(0, PostModel(
-                                            id: DateTime.now().toString(),
-                                            author: 'You',
-                                            username: 'your_username',
-                                            content: _newPostController.text,
-                                            timestamp: DateTime.now(),
-                                            reactions: 0,
-                                            shares: 0,
-                                            discussions: 0,
-                                            isReacted: false,
-                                          ));
+                                        setState(()  {
+                                          Supabase.instance.client
+                                        .from('posts')
+                                        .insert(
+                                          {
+                                            'id': data!.id,
+                                            'author': data!.author,
+                                            'username': data!.username,
+                                            'content': data!.content,
+                                            'reactions': 0,
+                                            'shares': 0,
+                                            'discussions': 0,
+                                            'is_reacted': 0,
+                                          });
+                                          // allPosts.insert(0, PostModel(
+                                          //   id: DateTime.now().toString(),
+                                          //   author: 'You',
+                                          //   username: 'your_username',
+                                          //   content: _newPostController.text,
+                                          //   timestamp: DateTime.now(),
+                                          //   reactions: 0,
+                                          //   shares: 0,
+                                          //   discussions: 0,
+                                          //   isReacted: false,
+                                          // ));
                                           _newPostController.clear();
                                           _showCreatePost = false;
                                         });
@@ -558,13 +584,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     }
   }
 
-  Widget _buildTimelineFeed() {
-  final _response = Supabase.instance.client
-      .from('posts')
-      .select('*')
-      .asStream();
-
-      Widget _buildEngagementButton({
+  Widget _buildEngagementButton({
     required IconData icon,
     required int count,
     required Color color,
@@ -588,6 +608,12 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       ),
     );
   }
+
+  Widget _buildTimelineFeed() {
+  final _response = Supabase.instance.client
+      .from('posts')
+      .select('*')
+      .asStream();
 
   return RefreshIndicator(
     onRefresh: () async {
@@ -2339,14 +2365,14 @@ class _PostModelCardState extends State<PostModelCard>
 
 // Data Models
 class PostModel {
-  final String id;
-  final String author;
-  final String username;
-  final String content;
-  final DateTime timestamp;
+  String id;
+  String author;
+  String username;
+  String content;
+  DateTime timestamp;
   int reactions;
-  final int shares;
-  final int discussions;
+  int shares;
+  int discussions;
   bool isReacted;
 
   PostModel({
