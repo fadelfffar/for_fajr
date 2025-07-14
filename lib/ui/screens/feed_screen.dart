@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -197,8 +195,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   final TextEditingController _newPostController = TextEditingController();
   bool _showCreatePost = false;
 
-  // List to store posts
-  List<Map<String, dynamic>> _posts = [];
   
   // Loading state
   bool _isLoading = true;
@@ -265,32 +261,32 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
-    _fetchPosts;
+    // _fetchPosts;
   }
 
-  Future<void> _fetchPosts() async {
-    try {
-      // Fetch all posts, order by created_at descending
-      final response = await Supabase.instance.client
-          .from('posts')
-          .select('*');
-          //TODO(): possible error on response json serialization
-      setState(() {
-        _posts = (response as List).cast<Map<String, dynamic>>();
-        _isLoading = false;
-        print('please write some word to continue');
-        String? word = stdin.readLineSync();
-        print('your word is: $word ,Fetched posts: $response');
-      });
-    } catch (error) {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching posts response: $error')),
-      );
-    }
-  }
+  // Future<void> _fetchPosts() async {
+  //   try {
+  //     // Fetch all posts, order by created_at descending
+  //     final response = await Supabase.instance.client
+  //         .from('posts')
+  //         .select('*');
+  //         //TODO(): possible error on response json serialization
+  //     setState(() {
+  //       _posts = (response as List).cast<Map<String, dynamic>>();
+  //       _isLoading = false;
+  //       print('please write some word to continue');
+  //       String? word = stdin.readLineSync();
+  //       print('your word is: $word ,Fetched posts: $response');
+  //     });
+  //   } catch (error) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Error fetching posts response: $error')),
+  //     );
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -571,32 +567,155 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               final post = posts[index];
-              return Card(
-                child: Padding(
+              return AnimatedBuilder(
+      animation: Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: AnimationController(
+      duration: Duration(milliseconds: 150),
+      vsync: this,
+    ), curve: Curves.easeInOut),
+    ),
+      builder: (context, child) {
+        return Transform.scale(
+          scale: Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: AnimationController(
+      duration: Duration(milliseconds: 150),
+      vsync: this,
+    ), curve: Curves.easeInOut),
+    ).value,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  // TODO(): need to replace withOpacity as it is deprecated
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                Padding(
                   padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      Text(
-                        post['username'],
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          // TODO(): put transparent color that show profile name or picture
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.lightGreen),
+                        ),
+                        child: Center(
+                          child: Text(
+                            post['author'].split(' ').map((n) => n[0]).take(2).join().toUpperCase(),
+                            style: TextStyle(
+                              color: Colors.lightGreen,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(height: 8),
-                      Text(post['content']),
-                      SizedBox(height: 8),
-                      Text(
-                        'by ${post['author']}',
-                        style: TextStyle(
-                          color: Colors.grey,
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  post['author'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Color(0xFF004D40),
+                                  ),
+                                ),
+                                SizedBox(width: 6),
+                              ],
+                            ),
+                            Text(
+                              '@${post['username']} • ${(post['timestamp'])}',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      Icon(Icons.more_vert, color: Colors.grey[400]),
                     ],
                   ),
                 ),
-              );
+                
+                // Content
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    post['content'],
+                    style: TextStyle(
+                      fontSize: 15,
+                      height: 1.6,
+                      color: Color(0xFF2C2C2C),
+                    ),
+                  ),
+                ),
+                
+                SizedBox(height: 16),
+                
+                // Engagement
+                // Padding(
+                //   padding: EdgeInsets.all(16),
+                //   child: Row(
+                //     children: [
+                //       _buildEngagementButton(
+                //         icon: widget.post.isReacted ? Icons.favorite : Icons.favorite_border,
+                //         count: widget.post.reactions,
+                //         color: widget.post.isReacted ? Colors.red : Colors.grey[600]!,
+                //         onTap: () {
+                //           _animationController.forward().then((_) {
+                //             _animationController.reverse();
+                //           });
+                //           widget.onReact();
+                //         },
+                //       ),
+                //       SizedBox(width: 20),
+                //       _buildEngagementButton(
+                //         icon: Icons.chat_bubble_outline,
+                //         count: widget.post.discussions,
+                //         color: Colors.grey[600]!,
+                //         onTap: () {
+                //           // TODO(): route to comment screen
+                //           // TODO(): nest comment screen navigator to only on comment screen, not using pushNamed and routing on main.dart
+                //           Navigator.pushNamed(context, '/comment');
+                //         },
+                //       ),
+                //       SizedBox(width: 20),
+                //       _buildEngagementButton(
+                //         icon: Icons.share,
+                //         count: widget.post.shares,
+                //         color: Colors.grey[600]!,
+                //         onTap: () {},
+                //       ),
+                //       Spacer(),
+                //       Icon(Icons.bookmark_border, color: Colors.grey[400], size: 22),
+                //     ],
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
             },
           );
 
@@ -1986,7 +2105,10 @@ class _PostModelCardState extends State<PostModelCard>
       vsync: this,
     );
     _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+      CurvedAnimation(parent: AnimationController(
+      duration: Duration(milliseconds: 150),
+      vsync: this,
+    ), curve: Curves.easeInOut),
     );
   }
 
@@ -2010,6 +2132,7 @@ class _PostModelCardState extends State<PostModelCard>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
+                  // TODO(): need to replace withOpacity as it is deprecated
                   color: Colors.black.withOpacity(0.05),
                   blurRadius: 10,
                   offset: Offset(0, 2),
