@@ -234,7 +234,7 @@ class _CommentScreenState extends State<CommentScreen> {
           if (_replyingToId != null)
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              color: Color(0xFF004D40).withOpacity(0.1),
+              color: Color(0xFF004D40).withValues(alpha:  .1),
               child: Row(
                 children: [
                   Icon(Icons.reply, color: Color(0xFF004D40), size: 16),
@@ -329,7 +329,7 @@ class _CommentScreenState extends State<CommentScreen> {
         color: Colors.white,
         border: Border(
           left: comment.depth > 0 
-              ? BorderSide(color: Color(0xFF004D40).withOpacity(0.3), width: 2)
+              ? BorderSide(color: Color(0xFF004D40).withValues(alpha: 0.3), width: 2)
               : BorderSide.none,
         ),
       ),

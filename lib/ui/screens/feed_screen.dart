@@ -134,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: Offset(0, -2),
             ),
@@ -336,7 +336,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                           Container(
                             padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Icon(
@@ -391,7 +391,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 10,
                             offset: Offset(0, 5),
                           ),
@@ -416,7 +416,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: Color(0xFF004D40).withOpacity(0.1),
+                                      color: Color(0xFF004D40).withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: Text(
@@ -499,7 +499,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(25),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 8,
                               offset: Offset(0, 3),
                             ),
@@ -511,7 +511,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                             SizedBox(width: 12),
                             Text(
                               'Share your thoughts with the Ummah...',
-                              style: TextStyle(color: Colors.white.withOpacity(0.9)),
+                              style: TextStyle(color: Colors.white.withValues(alpha: 0.9)),
                             ),
                             Spacer(),
                             Icon(_showCreatePost ? Icons.keyboard_arrow_up : Icons.add, color: Colors.white),
@@ -545,6 +545,18 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       ),
     );
   }
+  String _formatTimestamp(DateTime timestamp) {
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+    
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h';
+    } else {
+      return '${difference.inDays}d';
+    }
+  }
 
   Widget _buildTimelineFeed() {
   final _response = Supabase.instance.client
@@ -568,6 +580,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
             itemBuilder: (context, index) {
               final post = posts[index];
               return AnimatedBuilder(
+                //optional TODO(): separete PostModelCard implementation on StreamBuilder's ListViewBuilder if possible and separete the animation data into _animationController if possible
       animation: Tween<double>(begin: 1.0, end: 0.95).animate(
       CurvedAnimation(parent: AnimationController(
       duration: Duration(milliseconds: 150),
@@ -589,8 +602,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  // TODO(): need to replace withOpacity as it is deprecated
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: Offset(0, 2),
                 ),
@@ -977,9 +989,9 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Color(0xFF004D40).withOpacity(0.1),
+          color: Color(0xFF004D40).withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Color(0xFF004D40).withOpacity(0.3)),
+          border: Border.all(color: Color(0xFF004D40).withValues(alpha: 0.3)),
         ),
         child: Text(
           topic,
@@ -1001,7 +1013,7 @@ class _SearchScreenState extends State<SearchScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 5,
             offset: Offset(0, 2),
           ),
@@ -1013,7 +1025,7 @@ class _SearchScreenState extends State<SearchScreen> {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Color(0xFF004D40).withOpacity(0.1),
+              color: Color(0xFF004D40).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(25),
             ),
             child: Center(
@@ -1150,7 +1162,7 @@ class SavedScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: Offset(0, 2),
                 ),
@@ -1284,7 +1296,7 @@ class NotificationsScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(Icons.notifications, color: Colors.white),
@@ -1328,10 +1340,10 @@ class NotificationsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: notification.isRead ? Colors.white : Color(0xFFF1F8E9),
                     borderRadius: BorderRadius.circular(12),
-                    border: notification.isRead ? null : Border.all(color: Color(0xFF004D40).withOpacity(0.2)),
+                    border: notification.isRead ? null : Border.all(color: Color(0xFF004D40).withValues(alpha: 0.2)),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 5,
                         offset: Offset(0, 2),
                       ),
@@ -1342,7 +1354,7 @@ class NotificationsScreen extends StatelessWidget {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: notification.avatar.withOpacity(0.1),
+                        color: notification.avatar.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(25),
                       ),
                       child: Icon(
@@ -1483,7 +1495,7 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
                           width: 100,
                           height: 100,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(color: Colors.white, width: 3),
                           ),
@@ -1623,7 +1635,7 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 5,
                 offset: Offset(0, 2),
               ),
@@ -1637,7 +1649,7 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Color(0xFF004D40).withOpacity(0.1),
+                    color: Color(0xFF004D40).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -1746,7 +1758,7 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
           leading: Container(
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: (iconColor ?? Color(0xFF004D40)).withOpacity(0.1),
+              color: (iconColor ?? Color(0xFF004D40)).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -2132,8 +2144,8 @@ class _PostModelCardState extends State<PostModelCard>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  // TODO(): need to replace withOpacity as it is deprecated
-                  color: Colors.black.withOpacity(0.05),
+                  // TODO(): need to replace withValues alpha: as it is deprecated
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: Offset(0, 2),
                 ),
