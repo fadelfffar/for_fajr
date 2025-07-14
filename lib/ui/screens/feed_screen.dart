@@ -551,39 +551,66 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildTimelineFeed() {
-    final _response = Supabase.instance.client
-          .from('posts')
-          .select('*')
-          .asStream();
-    return RefreshIndicator(
-      onRefresh: () async {
-        await Future.delayed(Duration(seconds: 1));
-        setState(() {});
-      },
-      child: StreamBuilder<List<Map<String, dynamic>>>(
-         stream: _response,
-         builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                // By default, show a loading spinner.
-                return const CircularProgressIndicator();
-              } else if(snapshot.hasError) {
-                return Text('${snapshot.error}');
-              } else if (snapshot.hasData) {
-                final post = snapshot.data!;
-                return ListView.builder(
+  final _response = Supabase.instance.client
+      .from('posts')
+      .select('*')
+      .asStream();
+
+  return RefreshIndicator(
+    onRefresh: () async {
+      await Future.delayed(Duration(seconds: 1));
+      setState(() {});
+    },
+    child: StreamBuilder<List<Map<String, dynamic>>>(
+      stream: _response,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final posts = snapshot.data!;
+          return ListView.builder(
+            padding: EdgeInsets.all(16),
+            itemCount: posts.length,
+            itemBuilder: (context, index) {
+              final post = posts[index];
+              return Card(
+                child: Padding(
                   padding: EdgeInsets.all(16),
-                  itemCount: _posts.length,
-                  itemBuilder: (context, index) {
-          final post = _posts[index];
-          return Text((post[index]['content']));
-        },
-                );
-              }
-              return Text("you failed");
-         },
-      ),
-    );
-  }
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post['username'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(post['content']),
+                      SizedBox(height: 8),
+                      Text(
+                        'by ${post['author_id']}',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        } else if (!snapshot.hasData) {
+                    // By default, show a loading spinner.
+          return const CircularProgressIndicator();
+        }
+        return Text("No posts found");
+      },
+    ),
+  );
+}
 
   void _showPostDialog() {
     showModalBottomSheet(
