@@ -564,6 +564,31 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       .select('*')
       .asStream();
 
+      Widget _buildEngagementButton({
+    required IconData icon,
+    required int count,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 20),
+          SizedBox(width: 6),
+          Text(
+            count.toString(),
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w500,
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   return RefreshIndicator(
     onRefresh: () async {
       await Future.delayed(Duration(seconds: 1));
@@ -684,44 +709,44 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                 SizedBox(height: 16),
                 
                 // Engagement
-                // Padding(
-                //   padding: EdgeInsets.all(16),
-                //   child: Row(
-                //     children: [
-                //       _buildEngagementButton(
-                //         icon: widget.post.isReacted ? Icons.favorite : Icons.favorite_border,
-                //         count: widget.post.reactions,
-                //         color: widget.post.isReacted ? Colors.red : Colors.grey[600]!,
-                //         onTap: () {
-                //           _animationController.forward().then((_) {
-                //             _animationController.reverse();
-                //           });
-                //           widget.onReact();
-                //         },
-                //       ),
-                //       SizedBox(width: 20),
-                //       _buildEngagementButton(
-                //         icon: Icons.chat_bubble_outline,
-                //         count: widget.post.discussions,
-                //         color: Colors.grey[600]!,
-                //         onTap: () {
-                //           // TODO(): route to comment screen
-                //           // TODO(): nest comment screen navigator to only on comment screen, not using pushNamed and routing on main.dart
-                //           Navigator.pushNamed(context, '/comment');
-                //         },
-                //       ),
-                //       SizedBox(width: 20),
-                //       _buildEngagementButton(
-                //         icon: Icons.share,
-                //         count: widget.post.shares,
-                //         color: Colors.grey[600]!,
-                //         onTap: () {},
-                //       ),
-                //       Spacer(),
-                //       Icon(Icons.bookmark_border, color: Colors.grey[400], size: 22),
-                //     ],
-                //   ),
-                // ),
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      _buildEngagementButton(
+                        icon: post['is_reacted'] ? Icons.favorite : Icons.favorite_border,
+                        count: post['reactions'],
+                        color: post['is_reacted'] ? Colors.red : Colors.grey[600]!,
+                        onTap: () {
+                          // _animationController.forward().then((_) {
+                          //   _animationController.reverse();
+                          // });
+                          // widget.onReact();
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      _buildEngagementButton(
+                        icon: Icons.chat_bubble_outline,
+                        count: post['discussions'],
+                        color: Colors.grey[600]!,
+                        onTap: () {
+                          // TODO(): route to comment screen
+                          // TODO(): nest comment screen navigator to only on comment screen, not using pushNamed and routing on main.dart
+                          Navigator.pushNamed(context, '/comment');
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      _buildEngagementButton(
+                        icon: Icons.share,
+                        count: post['shares'],
+                        color: Colors.grey[600]!,
+                        onTap: () {},
+                      ),
+                      Spacer(),
+                      Icon(Icons.bookmark_border, color: Colors.grey[400], size: 22),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
