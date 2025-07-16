@@ -1,181 +1,525 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
-import 'constants.dart';
+class SignUpScreen extends StatefulWidget {
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+  bool _isLoading = false;
+  bool _agreeToTerms = false;
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    void navigateHome(AuthResponse response) {
-      Navigator.of(context).pushReplacementNamed('/feed');
-    }
-
-    final darkModeThemeData = ThemeData.dark().copyWith(
-      colorScheme: const ColorScheme.dark(
-        primary: Color.fromARGB(248, 183, 183, 183), // text below main button
-      ),
-      textSelectionTheme: TextSelectionThemeData(
-        cursorColor: Colors.blueGrey[300], // cursor when typing
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        fillColor: Colors.grey[800], // background of text entry
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-        labelStyle: const TextStyle(
-            color:
-                Color.fromARGB(179, 255, 255, 255)), // text labeling text entry
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor:
-              const Color.fromARGB(255, 22, 135, 188), // main button
-          foregroundColor:
-              const Color.fromARGB(255, 255, 255, 255), // main button text
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-    );
-
     return Scaffold(
-      appBar: appBar('Sign In'),
-      body: ListView(
-        padding: const EdgeInsets.all(24.0),
-        children: [
-          SupaEmailAuth(
-            redirectTo: kIsWeb ? null : 'io.supabase.flutter://',
-            onSignInComplete: navigateHome,
-            onSignUpComplete: navigateHome,
-            metadataFields: [
-              MetaDataField(
-                prefixIcon: const Icon(Icons.person),
-                label: 'Username',
-                key: 'username',
-                validator: (val) {
-                  if (val == null || val.isEmpty) {
-                    return 'Please enter something';
-                  }
-                  return null;
-                },
-              ),
-              BooleanMetaDataField(
-                label: 'Keep me up to date with the latest news and updates.',
-                key: 'marketing_consent',
-                checkboxPosition: ListTileControlAffinity.leading,
-              ),
-              BooleanMetaDataField(
-                key: 'terms_agreement',
-                isRequired: true,
-                checkboxPosition: ListTileControlAffinity.leading,
-                richLabelSpans: [
-                  const TextSpan(text: 'I have read and agree to the '),
-                  TextSpan(
-                    text: 'Terms and Conditions',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        // Handle tap on Terms and Conditions
-                      },
-                  ),
-                ],
-              ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF0D1B2A),
+              Color(0xFF1B263B),
+              Color(0xFF415A77),
+              Color(0xFF778DA9),
+              Color(0xFF9A8C98),
+              Color(0xFFE9C46A),
+              Color(0xFFF4A261),
+              Color(0xFFE76F51),
             ],
           ),
-
-          const Divider(),
-          optionText,
-          spacer,
-
-          // Dark theme example
-          Card(
-              elevation: 10,
-              color: const Color.fromARGB(255, 24, 24, 24),
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Theme(
-                  data: darkModeThemeData,
-                  child: SupaEmailAuth(
-                      redirectTo: kIsWeb ? null : 'io.supabase.flutter://',
-                      onSignInComplete: navigateHome,
-                      onSignUpComplete: navigateHome,
-                      prefixIconEmail: null,
-                      prefixIconPassword: null,
-                      localization: const SupaEmailAuthLocalization(
-                          enterEmail: "email",
-                          enterPassword: "password",
-                          dontHaveAccount: "sign up",
-                          forgotPassword: "forgot password"),
-                      metadataFields: [
-                        MetaDataField(
-                          prefixIcon: const Icon(Icons.person),
-                          label: 'Username',
-                          key: 'username',
-                          validator: (val) {
-                            if (val == null || val.isEmpty) {
-                              return 'Please enter something';
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(24),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 40),
+                  
+                  // Header Section
+                  Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Icon(
+                          Icons.auto_awesome,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Join the Ummah',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Create your account and start connecting with fellow believers',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  
+                  SizedBox(height: 40),
+                  
+                  // Sign Up Form
+                  Container(
+                    padding: EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Create Account',
+                          style: TextStyle(
+                            color: Color(0xFF004D40),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        
+                        SizedBox(height: 24),
+                        
+                        // Full Name Field
+                        _buildTextField(
+                          controller: _fullNameController,
+                          label: 'Full Name',
+                          hint: 'Enter your full name',
+                          icon: Icons.person_outline,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your full name';
                             }
                             return null;
                           },
                         ),
-                        BooleanMetaDataField(
-                          label:
-                              'Keep me up to date with the latest news and updates.',
-                          key: 'marketing_consent',
-                          checkboxPosition: ListTileControlAffinity.leading,
+                        
+                        SizedBox(height: 16),
+                        
+                        // Username Field
+                        _buildTextField(
+                          controller: _usernameController,
+                          label: 'Username',
+                          hint: 'Choose a username',
+                          icon: Icons.alternate_email,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please choose a username';
+                            }
+                            if (value.length < 3) {
+                              return 'Username must be at least 3 characters';
+                            }
+                            return null;
+                          },
                         ),
-                        BooleanMetaDataField(
-                          key: 'terms_agreement',
-                          isRequired: true,
-                          checkboxPosition: ListTileControlAffinity.leading,
-                          richLabelSpans: [
-                            const TextSpan(
-                                text: 'I have read and agree to the '),
-                            TextSpan(
-                              text: 'Terms and Conditions.',
-                              style: const TextStyle(
-                                color: Colors.blue,
+                        
+                        SizedBox(height: 16),
+                        
+                        // Email Field
+                        _buildTextField(
+                          controller: _emailController,
+                          label: 'Email',
+                          hint: 'Enter your email address',
+                          icon: Icons.email_outlined,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            if (!value.contains('@')) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        
+                        SizedBox(height: 16),
+                        
+                        // Password Field
+                        _buildTextField(
+                          controller: _passwordController,
+                          label: 'Password',
+                          hint: 'Create a strong password',
+                          icon: Icons.lock_outline,
+                          isPassword: true,
+                          isPasswordVisible: _isPasswordVisible,
+                          onTogglePassword: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                        
+                        SizedBox(height: 16),
+                        
+                        // Confirm Password Field
+                        _buildTextField(
+                          controller: _confirmPasswordController,
+                          label: 'Confirm Password',
+                          hint: 'Confirm your password',
+                          icon: Icons.lock_outline,
+                          isPassword: true,
+                          isPasswordVisible: _isConfirmPasswordVisible,
+                          onTogglePassword: () {
+                            setState(() {
+                              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please confirm your password';
+                            }
+                            if (value != _passwordController.text) {
+                              return 'Passwords do not match';
+                            }
+                            return null;
+                          },
+                        ),
+                        
+                        SizedBox(height: 20),
+                        
+                        // Terms and Conditions
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: _agreeToTerms,
+                              onChanged: (value) {
+                                setState(() {
+                                  _agreeToTerms = value ?? false;
+                                });
+                              },
+                              activeColor: Color(0xFF004D40),
+                            ),
+                            Expanded(
+                              child: RichText(
+                                text: TextSpan(
+                                  text: 'I agree to the ',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 14,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Terms of Service',
+                                      style: TextStyle(
+                                        color: Color(0xFF004D40),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    TextSpan(text: ' and '),
+                                    TextSpan(
+                                      text: 'Privacy Policy',
+                                      style: TextStyle(
+                                        color: Color(0xFF004D40),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  //ignore: avoid_print
-                                  print('Terms and Conditions');
-                                },
                             ),
                           ],
                         ),
-                      ]),
-                ),
-              )),
-
-          // const Divider(),
-          // optionText,
-          // spacer,
-          // ElevatedButton.icon(
-          //   icon: const Icon(Icons.email),
-          //   onPressed: () {
-          //     Navigator.popAndPushNamed(context, '/magic_link');
-          //   },
-          //   label: const Text('Sign in with Magic Link'),
-          // ),
-          // spacer,
-          // ElevatedButton.icon(
-          //   onPressed: () {
-          //     Navigator.popAndPushNamed(context, '/phone_sign_in');
-          //   },
-          //   icon: const Icon(Icons.phone),
-          //   label: const Text('Sign in with Phone'),
-          // ),
-        ],
+                        
+                        SizedBox(height: 24),
+                        
+                        // Sign Up Button
+                        ElevatedButton(
+                          onPressed: _isLoading || !_agreeToTerms
+                              ? null
+                              : () => _handleSignUp(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF004D40),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 2,
+                          ),
+                          child: _isLoading
+                              ? SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  'Create Account',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
+                        
+                        SizedBox(height: 16),
+                        
+                        // Divider
+                        Row(
+                          children: [
+                            Expanded(child: Divider()),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                'OR',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            Expanded(child: Divider()),
+                          ],
+                        ),
+                        
+                        SizedBox(height: 16),
+                        
+                        // Social Sign Up Buttons
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  // Handle Google sign up
+                                },
+                                icon: Icon(Icons.g_mobiledata, color: Colors.red),
+                                label: Text('Google'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.grey[700],
+                                  side: BorderSide(color: Colors.grey[300]!),
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  // Handle Apple sign up
+                                },
+                                icon: Icon(Icons.apple, color: Colors.black),
+                                label: Text('Apple'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.grey[700],
+                                  side: BorderSide(color: Colors.grey[300]!),
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  SizedBox(height: 24),
+                  
+                  // Sign In Link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already have an account? ',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Sign In',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                  SizedBox(height: 40),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+    bool isPassword = false,
+    bool isPasswordVisible = false,
+    VoidCallback? onTogglePassword,
+    String? Function(String?)? validator,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Color(0xFF004D40),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          obscureText: isPassword && !isPasswordVisible,
+          validator: validator,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: TextStyle(color: Colors.grey[400]),
+            prefixIcon: Icon(icon, color: Colors.grey[400]),
+            suffixIcon: isPassword
+                ? IconButton(
+                    icon: Icon(
+                      isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey[400],
+                    ),
+                    onPressed: onTogglePassword,
+                  )
+                : null,
+            filled: true,
+            fillColor: Color(0xFFF8F9FA),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey[200]!),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Color(0xFF004D40), width: 2),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.red[400]!),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.red[400]!, width: 2),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _handleSignUp() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // TODO: Implement actual sign up logic here
+      // For now, we'll simulate a network request
+      await Future.delayed(Duration(seconds: 2));
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Account created successfully! Barakallahu feeki.'),
+          backgroundColor: Color(0xFF004D40),
+        ),
+      );
+
+      // Navigate to main screen or verification screen
+      // Navigator.pushReplacementNamed(context, '/main');
+      
+    } catch (e) {
+      // Show error messagesS
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Sign up failed. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

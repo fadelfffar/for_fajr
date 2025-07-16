@@ -183,7 +183,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-// Feed Screen (Your original code with minor modifications)
+// Feed Screen
 class FeedScreen extends StatefulWidget {
   @override
   _FeedScreenState createState() => _FeedScreenState();
