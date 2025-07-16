@@ -4,8 +4,6 @@ import 'package:for_fajr/ui/screens/login_screen.dart';
 import 'package:for_fajr/ui/screens/new_post_screen.dart';
 import 'package:for_fajr/ui/screens/post_list_screen.dart';
 import 'package:for_fajr/ui/screens/sign_up_screen.dart';
-import 'package:native_geofence/native_geofence.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 
@@ -26,39 +24,39 @@ class MainApp extends StatefulWidget {
 
 }
 
-Future<void> initPlatformState() async {
-  var status = await Permission.location.status;
-  if (await Permission.location.isDenied) {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.location,
-      // to be able to still get notifications when the app isn't running
-      Permission.locationAlways,
-      Permission.notification
-    ].request();
-    // print(statuses[Permission.location]);
-  }
-    // debugPrint('Initializing...');
-    await NativeGeofenceManager.instance.initialize();
-    // debugPrint('Initialization done');
-  }
+// Future<void> initPlatformState() async {
+//   var status = await Permission.location.status;
+//   if (await Permission.location.isDenied) {
+//     Map<Permission, PermissionStatus> statuses = await [
+//       Permission.location,
+//       // to be able to still get notifications when the app isn't running
+//       Permission.locationAlways,
+//       Permission.notification
+//     ].request();
+//     // print(statuses[Permission.location]);
+//   }
+//     // debugPrint('Initializing...');
+//     await NativeGeofenceManager.instance.initialize();
+//     // debugPrint('Initialization done');
+//   }
 
 class _MainAppState extends State<MainApp> {
 
   @override initState() {
     super.initState();
-    initPlatformState();
+    // initPlatformState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: NoorConnectApp(),
-      initialRoute: '/feed',
+      initialRoute: '/sign-in',
       routes: {
         '/feed': (context) => NoorConnectApp(),
         '/login' : (context) => LoginScreen(),
         // '/comment' : (context) => CommentScreenV1(postId: '1', postAuthor: 'Sister Khadijah', postContent:  'SubhanAllah! This is such a beautiful reminder. May Allah reward you for sharing this beneficial content. Ameen! 🤲',),
-        '/sign-up' : (context) => SignUpScreen(),
+        '/sign-in' : (context) => SignUpScreen(),
         '/post-list' : (context) => PostListScreen(),
         '/new-post' : (context) => NewPostScreen(),
         // '/new-comment' : (context) => NewCommentScreen(),

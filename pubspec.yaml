@@ -19,6 +19,7 @@ dependencies:
   realtime_client: ^2.4.2
   storage_client: ^2.3.1
   supabase: ^2.6.3
+  supabase_auth_ui: ^0.5.5
   supabase_flutter: ^2.8.4
 
 dev_dependencies:

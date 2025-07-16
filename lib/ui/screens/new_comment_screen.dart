@@ -20,7 +20,7 @@
 //   void initState() {
 //     //data model initialization as required by compiler
 //     super.initState();
-//     // TODO(): add Foreign Key post_id
+//     // TidODO(): add Foreign Key post_id
 //     data = CommentModel(commentCaption: 'Hello');
 //   }
 

@@ -194,7 +194,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   final TextEditingController _thoughtController = TextEditingController();
   final TextEditingController _newPostController = TextEditingController();
   bool _showCreatePost = false;
-  late PostModel? data;
+  late PostModel data;
   // Loading state
   bool _isLoading = true;
   
@@ -271,32 +271,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       discussions: 67,
       isReacted: false,
     );
-    // _fetchPosts;
   }
-
-  // Future<void> _fetchPosts() async {
-  //   try {
-  //     // Fetch all posts, order by created_at descending
-  //     final response = await Supabase.instance.client
-  //         .from('posts')
-  //         .select('*');
-  //         //TODO(): possible error on response json serialization
-  //     setState(() {
-  //       _posts = (response as List).cast<Map<String, dynamic>>();
-  //       _isLoading = false;
-  //       print('please write some word to continue');
-  //       String? word = stdin.readLineSync();
-  //       print('your word is: $word ,Fetched posts: $response');
-  //     });
-  //   } catch (error) {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Error fetching posts response: $error')),
-  //     );
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -462,15 +437,20 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                         .from('posts')
                                         .insert(
                                           {
-                                            'id': data!.id,
-                                            'author': data!.author,
-                                            'username': data!.username,
-                                            'content': data!.content,
+                                            'id': data.id,
+                                            'author': data.author,
+                                            'username': data.username,
+                                            'content': data.content,
+                                            'timestamp': DateTime.now().toIso8601String(),
                                             'reactions': 0,
                                             'shares': 0,
                                             'discussions': 0,
-                                            'is_reacted': 0,
-                                          });
+                                            'is_reacted': false,
+                                          }).catchError((err) {
+                                            print('Error: $err'); // Prints 401
+                                            }, test: (error) {
+                                              return error is int && error >= 400;
+                                            });
                                           // allPosts.insert(0, PostModel(
                                           //   id: DateTime.now().toString(),
                                           //   author: 'You',
@@ -2365,6 +2345,7 @@ class _PostModelCardState extends State<PostModelCard>
 
 // Data Models
 class PostModel {
+  // TODO(): change to uuid generator using pub dev package?
   String id;
   String author;
   String username;
