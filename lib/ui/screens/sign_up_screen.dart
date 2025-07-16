@@ -1,4 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -6,6 +9,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  late AuthModel data;
+  var uuid = Uuid();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -18,6 +23,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isLoading = false;
   bool _agreeToTerms = false;
 
+  @override
+  void initState() {
+    super.initState();
+    data = AuthModel(fullname: "enter fullname", username: "enter username", email: "enter email", password: "enter password");
+  }
   @override
   void dispose() {
     _fullNameController.dispose();
@@ -134,6 +144,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your full name';
+                            } else if (value.isNotEmpty) {
+                              data.fullname = value;
                             }
                             return null;
                           },
@@ -153,6 +165,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             }
                             if (value.length < 3) {
                               return 'Username must be at least 3 characters';
+                            } else if (value.isNotEmpty) {
+                              data.username = value;
                             }
                             return null;
                           },
@@ -173,6 +187,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             }
                             if (!value.contains('@')) {
                               return 'Please enter a valid email';
+                            } else if (value.isNotEmpty) {
+                              data.email = value;
                             }
                             return null;
                           },
@@ -197,8 +213,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a password';
                             }
-                            if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
+                            if (value.length < 8) {
+                              return 'Password must be at least 8 characters';
+                            } else if (value.isNotEmpty) {
+                              data.password = value;
                             }
                             return null;
                           },
@@ -223,8 +241,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please confirm your password';
                             }
-                            if (value != _passwordController.text) {
+                            if (value != data.password) {
                               return 'Passwords do not match';
+                            } else if (value.isNotEmpty || value == data.password) {
+                              return 'Password match';
                             }
                             return null;
                           },
@@ -485,6 +505,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> _handleSignUp() async {
     if (!_formKey.currentState!.validate()) {
+      Future<void> signUpNewUser() async {
+  final AuthResponse res = await Supabase.instance.client.auth.signUp(
+    email: 'valid.email@supabase.io',
+    password: 'example-password'
+  );
+}
       return;
     }
 
@@ -496,7 +522,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // TODO: Implement actual sign up logic here
       // For now, we'll simulate a network request
       await Future.delayed(Duration(seconds: 2));
+      Supabase.instance.client
+      .from('user')
+      .insert(
+        {
+          'full_name': data.fullname,
+          'user_name': data.username,
+          'email': data.email,
+          'password': data.password,
+          'created_at': DateTime.now(),
 
+        }
+      );
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -522,4 +559,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
     }
   }
+}
+
+class AuthModel {
+  // TODO(): add uiid generator?
+  String fullname;
+  String username;
+  String email;
+  String password;
+
+  AuthModel({
+    required this.fullname,
+    required this.username,
+    required this.email,
+    required this.password,
+  });
 }
