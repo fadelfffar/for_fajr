@@ -60,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(24),
+            padding: EdgeInsets.all(12),
             child: Form(
               key: _formKey,
               child: Column(
@@ -74,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Container(
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: Icon(
@@ -94,7 +94,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Create your account and start connecting with fellow believers',
+                        'Create your account and start connecting with fellow moeslims',
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 16,
@@ -108,13 +108,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   
                   // Sign Up Form
                   Container(
-                    padding: EdgeInsets.all(24),
+                    padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 20,
                           offset: Offset(0, 10),
                         ),
@@ -123,17 +123,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        SizedBox(height: 8,),
                         Text(
                           'Create Account',
                           style: TextStyle(
                             color: Color(0xFF004D40),
-                            fontSize: 24,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
                         ),
                         
-                        SizedBox(height: 24),
+                        SizedBox(height: 18),
                         
                         // Full Name Field
                         _buildTextField(
