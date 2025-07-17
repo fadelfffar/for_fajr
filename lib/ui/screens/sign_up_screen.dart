@@ -522,19 +522,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       // TODO: Implement actual sign up logic here
       // For now, we'll simulate a network request
-      await Future.delayed(Duration(seconds: 2));
-      Supabase.instance.client
-      .from('user')
-      .insert(
-        {
+      // await Future.delayed(Duration(seconds: 2));
+       Supabase.instance.client
+      .auth.signUp(
+        email: data.email,
+        password: data.password,
+        data: {
           'full_name': data.fullname,
           'user_name': data.username,
-          'email': data.email,
-          'password': data.password,
-          'created_at': DateTime.now(),
+          'created_at': DateTime.now().toIso8601String(),
+          }).catchError((err) {
+        print('Error: $err'); // Prints 401
+        }, test: (error) {
+          return error is int && error >= 400;
+        });
 
-        }
-      );
+      // .from('user')
+      // .insert(
+      //   {
+      //     'id': uuid.v4(),
+      //     'full_name': data.fullname,
+      //     'user_name': data.username,
+      //     'email': data.email,
+      //     'password': data.password,
+      //     'created_at': DateTime.now().toIso8601String(),
+      //   }
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
