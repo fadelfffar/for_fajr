@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: ElevatedButton(
           onPressed: () async {
             await Supabase.instance.client.auth.signInAnonymously();
-            Navigator.pushReplacementNamed(context, '/new-masjid');
+            Navigator.pushReplacementNamed(context, '/feed');
           },
           child: Text("Log In Anonymous"))
       ),

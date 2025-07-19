@@ -184,12 +184,13 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 // Feed Screen
-class FeedScreen extends StatefulWidget {
+class FeedScreen extends StatefulWidget { 
   @override
   _FeedScreenState createState() => _FeedScreenState();
 }
 
 class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
+  // final currentUser = Supabase.instance.client.auth.getUser();
   late TabController _tabController;
   final TextEditingController _thoughtController = TextEditingController();
   final TextEditingController _newPostController = TextEditingController();
@@ -197,6 +198,32 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   late PostModel data;
   // Loading state
   bool _isLoading = true;
+  Future<String?> getComprehensiveUserUuid() async {
+    final supabase = Supabase.instance.client;
+
+    try {
+      // Check current session
+      final Session? session = supabase.auth.currentSession;
+      
+      if (session == null) {
+        print('No active session');
+        return null;
+      }
+
+      // Verify user exists
+      final User? user = session.user;
+      if (user == null) {
+        print('User is null');
+        return null;
+      }
+
+      // Return UUID
+      return user.id;
+    } catch (e) {
+      print('Unexpected error retrieving UUID: $e');
+      return null;
+    }
+  }
   
   List<PostModel> allPosts = [
     PostModel(
@@ -437,7 +464,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                         .from('posts')
                                         .insert(
                                           {
-                                            'id': data.id,
+                                            'id': getComprehensiveUserUuid(),
                                             'author': data.author,
                                             'username': data.username,
                                             'content': data.content,
@@ -447,7 +474,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                             'discussions': 0,
                                             'is_reacted': false,
                                           }).catchError((err) {
-                                            print('Error: $err'); // Prints 401
+                                            print('Error: $err');  // Prints 401
                                             }, test: (error) {
                                               return error is int && error >= 400;
                                             });
@@ -464,6 +491,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                           // ));
                                           _newPostController.clear();
                                           _showCreatePost = false;
+                                          print("new user created");
                                         });
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
@@ -596,10 +624,11 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       .asStream();
 
   return RefreshIndicator(
+    // TODO(): remove async and loading
     onRefresh: () async {
-      await Future.delayed(Duration(seconds: 1));
       setState(() {});
     },
+    // TODO(): figure out debugging pause on StreamBuilder
     child: StreamBuilder<List<Map<String, dynamic>>>(
       stream: _response,
       builder: (context, snapshot) {
@@ -774,6 +803,14 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   );
 }
 
+  void _getCurrentUUID() {
+    final currentUuid = Supabase.instance.client
+    .from('users')
+    .select('*')
+    .eq('email', 'fadelfffar@gmail.com')            // filter by UUID
+    .single();
+  }
+
   void _showPostDialog() {
     showModalBottomSheet(
       context: context,
@@ -845,7 +882,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                               if (_thoughtController.text.isNotEmpty) {
                                 setState(() {
                                   allPosts.insert(0, PostModel(
-                                    id: DateTime.now().toString(),
+                                    id: _getCurrentUUID.toString(),
                                     author: 'You',
                                     username: 'your_username',
                                     content: _thoughtController.text,
