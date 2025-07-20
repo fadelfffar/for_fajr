@@ -197,33 +197,8 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   bool _showCreatePost = false;
   late PostModel data;
   // Loading state
-  bool _isLoading = true;
-  Future<String?> getComprehensiveUserUuid() async {
-    final supabase = Supabase.instance.client;
-
-    try {
-      // Check current session
-      final Session? session = supabase.auth.currentSession;
-      
-      if (session == null) {
-        print('No active session');
-        return null;
-      }
-
-      // Verify user exists
-      final User? user = session.user;
-      if (user == null) {
-        print('User is null');
-        return null;
-      }
-
-      // Return UUID
-      return user.id;
-    } catch (e) {
-      print('Unexpected error retrieving UUID: $e');
-      return null;
-    }
-  }
+  // function to get current user id with null-safe setting and debug test
+  final userId = Supabase.instance.client.auth.currentUser?.id ?? 'no-user';
   
   List<PostModel> allPosts = [
     PostModel(
@@ -464,7 +439,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                         .from('posts')
                                         .insert(
                                           {
-                                            'id': getComprehensiveUserUuid(),
+                                            'id': userId,
                                             'author': data.author,
                                             'username': data.username,
                                             'content': data.content,
