@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+// TOOD(): 
 
 // Comment model
 class IslamicComment {
@@ -66,6 +69,7 @@ class CommentScreen extends StatefulWidget {
 }
 
 class _CommentScreenState extends State<CommentScreen> {
+  final userId = Supabase.instance.client.auth.currentUser?.id ?? 'no-user';
   final TextEditingController _commentController = TextEditingController();
   final TextEditingController _replyController = TextEditingController();
   final FocusNode _commentFocusNode = FocusNode();
@@ -600,3 +604,40 @@ class _CommentScreenState extends State<CommentScreen> {
     }
   }
 }
+
+
+
+
+// onPressed: () async {
+//                                       if (_newPostController.text.isNotEmpty) {
+//                                         setState(()  {
+//                                           Supabase.instance.client
+//                                         .from('posts')
+//                                         .insert(
+//                                           {
+//                                             'id': userId,
+//                                             'author': data.author,
+//                                             'username': data.username,
+//                                             'content': data.content,
+//                                             'timestamp': DateTime.now().toIso8601String(),
+//                                             'reactions': 0,
+//                                             'shares': 0,
+//                                             'discussions': 0,
+//                                             'is_reacted': false,
+//                                           }).catchError((err) {
+//                                             print('Error: $err');  // Prints 401
+//                                             }, test: (error) {
+//                                               return error is int && error >= 400;
+//                                             });
+//                                           _newPostController.clear();
+//                                           _showCreatePost = false;
+//                                           print("new user created");
+//                                         });
+//                                         ScaffoldMessenger.of(context).showSnackBar(
+//                                           SnackBar(
+//                                             content: Text('Your thought has been shared! Barakallahu feeki.'),
+//                                             backgroundColor: Color(0xFF004D40),
+//                                           ),
+//                                         );
+//                                       }
+//                                     },

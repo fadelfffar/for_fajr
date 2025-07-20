@@ -453,17 +453,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                             }, test: (error) {
                                               return error is int && error >= 400;
                                             });
-                                          // allPosts.insert(0, PostModel(
-                                          //   id: DateTime.now().toString(),
-                                          //   author: 'You',
-                                          //   username: 'your_username',
-                                          //   content: _newPostController.text,
-                                          //   timestamp: DateTime.now(),
-                                          //   reactions: 0,
-                                          //   shares: 0,
-                                          //   discussions: 0,
-                                          //   isReacted: false,
-                                          // ));
                                           _newPostController.clear();
                                           _showCreatePost = false;
                                           print("new user created");
