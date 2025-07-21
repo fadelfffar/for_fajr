@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 void main() {
   runApp(NoorConnectApp());
@@ -184,7 +185,7 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 // Feed Screen
-class FeedScreen extends StatefulWidget { 
+class FeedScreen extends StatefulWidget {
   @override
   _FeedScreenState createState() => _FeedScreenState();
 }
@@ -200,72 +201,16 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   // function to get current user id with null-safe setting and debug test
   final userId = Supabase.instance.client.auth.currentUser?.id ?? 'no-user';
   
-  List<PostModel> allPosts = [
-    PostModel(
-      id: '1',
-      author: 'Hafiz Mahmoud',
-      username: 'hafiz_mahmoud',
-      content: 'La hawla wa la quwwata illa billah - There is no power except with Allah. When life gets overwhelming, remember that Allah is always in control. Trust His wisdom and timing. 🤲',
-      timestamp: DateTime.now().subtract(Duration(minutes: 15)),
-      reactions: 234,
-      shares: 45,
-      discussions: 67,
-      isReacted: false,
-    ),
-    PostModel(
-      id: '2',
-      author: 'Sister Maryam',
-      username: 'maryam_guidance',
-      content: 'Just  reading Surah Al-Mulk before sleeping. The peace it brings to the heart is indescribable. May Allah protect us all through the night and grant us forgiveness. SubhanAllah for the blessing of the Quran! 📖✨',
-      timestamp: DateTime.now().subtract(Duration(hours: 1)),
-      reactions: 189,
-      shares: 78,
-      discussions: 34,
-      isReacted: true,
-    ),
-    PostModel(
-      id: '3',
-      author: 'Dr. Yusuf Ahmed',
-      username: 'dr_yusuf',
-      content: 'Reminder: "Whoever believes in Allah and the Last Day, let him speak good or remain silent." - Prophet Muhammad (ﷺ)\n\nIn our digital age, this hadith is more relevant than ever. Let\'s use our words to spread light, not darkness.',
-      timestamp: DateTime.now().subtract(Duration(hours: 3)),
-      reactions: 456,
-      shares: 123,
-      discussions: 89,
-      isReacted: false,
-    ),
-    PostModel(
-      id: '4',
-      author: 'Ustadh Bilal',
-      username: 'ustadh_bilal',
-      content: 'Alhamdulillahi rabbil alameen! Our weekend Islamic study circle was amazing. We discussed the concept of Tawakkul (trust in Allah). Remember: Plan, work hard, then trust Allah with the results. He knows what\'s best for us.',
-      timestamp: DateTime.now().subtract(Duration(hours: 5)),
-      reactions: 312,
-      shares: 97,
-      discussions: 156,
-      isReacted: true,
-    ),
-    PostModel(
-      id: '5',
-      author: 'Muslimah Diary',
-      username: 'muslimah_stories',
-      content: 'Today I made dua for someone who hurt me. At first it felt difficult, but then I remembered how much Allah loves those who forgive. Forgiveness is a gift we give ourselves. May Allah soften all our hearts. 💚',
-      timestamp: DateTime.now().subtract(Duration(hours: 8)),
-      reactions: 278,
-      shares: 62,
-      discussions: 103,
-      isReacted: false,
-    ),
-  ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     data = PostModel(
-      id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
+      post_id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
       author: 'Hafiz Mahmoud',
       username: 'hafiz_mahmoud',
+      user_id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
       content: 'La hawla wa la quwwata illa billah - There is no power except with Allah. When life gets overwhelming, remember that Allah is always in control. Trust His wisdom and timing. 🤲',
       timestamp: DateTime.now().subtract(Duration(minutes: 15)),
       reactions: 234,
@@ -439,9 +384,10 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                         .from('posts')
                                         .insert(
                                           {
-                                            'id': userId,
+                                            'id': Uuid().v4(),
                                             'author': data.author,
                                             'username': data.username,
+                                            'user_id': userId,
                                             'content': data.content,
                                             'timestamp': DateTime.now().toIso8601String(),
                                             'reactions': 0,
@@ -767,14 +713,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   );
 }
 
-  void _getCurrentUUID() {
-    final currentUuid = Supabase.instance.client
-    .from('users')
-    .select('*')
-    .eq('email', 'fadelfffar@gmail.com')            // filter by UUID
-    .single();
-  }
-
   void _showPostDialog() {
     showModalBottomSheet(
       context: context,
@@ -845,17 +783,26 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                             onPressed: () {
                               if (_thoughtController.text.isNotEmpty) {
                                 setState(() {
-                                  allPosts.insert(0, PostModel(
-                                    id: _getCurrentUUID.toString(),
-                                    author: 'You',
-                                    username: 'your_username',
-                                    content: _thoughtController.text,
-                                    timestamp: DateTime.now(),
-                                    reactions: 0,
-                                    shares: 0,
-                                    discussions: 0,
-                                    isReacted: false,
-                                  ));
+                                  //TODO(): clean code
+                                  Supabase.instance.client
+                                    .from('posts')
+                                    .insert(
+                                      {
+                                        'id': Uuid().v4,
+                                        'author': data.author,
+                                        'username': data.username,
+                                        'user_id': userId,
+                                        'content': data.content,
+                                        'timestamp': DateTime.now().toIso8601String(),
+                                        'reactions': 0,
+                                        'shares': 0,
+                                        'discussions': 0,
+                                        'is_reacted': false,
+                                      }).catchError((err) {
+                                        print('Error: $err');  // Prints 401
+                                        }, test: (error) {
+                                          return error is int && error >= 400;
+                                        });
                                   _thoughtController.clear();
                                 });
                                 Navigator.pop(context);
@@ -1144,9 +1091,10 @@ class _SearchScreenState extends State<SearchScreen> {
 class SavedScreen extends StatelessWidget {
   final List<PostModel> savedPosts = [
     PostModel(
-      id: 's1',
+      post_id: 's1',
       author: 'Dr. Yusuf Ahmed',
       username: 'dr_yusuf',
+      user_id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
       content: 'Beautiful reminder: "And whoever relies upon Allah - then He is sufficient for him. Indeed, Allah will accomplish His purpose." - Quran 65:3',
       timestamp: DateTime.now().subtract(Duration(days: 2)),
       reactions: 567,
@@ -1155,9 +1103,10 @@ class SavedScreen extends StatelessWidget {
       isReacted: true,
     ),
     PostModel(
-      id: 's2',
+      post_id: 's2',
       author: 'Sister Aisha',
       username: 'aisha_reflections',
+      user_id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
       content: 'The Prophet (ﷺ) said: "The believers in their mutual kindness, compassion, and sympathy are just one body - when a limb suffers, the whole body responds to it with wakefulness and fever." - Bukhari & Muslim',
       timestamp: DateTime.now().subtract(Duration(days: 5)),
       reactions: 445,
@@ -2347,9 +2296,10 @@ class _PostModelCardState extends State<PostModelCard>
 // Data Models
 class PostModel {
   // TODO(): change to uuid generator using pub dev package?
-  String id;
+  String post_id;
   String author;
   String username;
+  String user_id;
   String content;
   DateTime timestamp;
   int reactions;
@@ -2358,9 +2308,10 @@ class PostModel {
   bool isReacted;
 
   PostModel({
-    required this.id,
+    required this.post_id,
     required this.author,
     required this.username,
+    required this.user_id,
     required this.content,
     required this.timestamp,
     required this.reactions,
@@ -2371,9 +2322,10 @@ class PostModel {
   // Factory constructor for JSON deserialization
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-      id: json['id'] as String,
+      post_id: json['post_id'] as String,
       author: json['author'] as String,
       username: json['username'] as String,
+      user_id: json['user_id'] as String,
       content: json['content'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
       reactions: json['reactions'] as int,
@@ -2386,9 +2338,10 @@ class PostModel {
   // Convert to JSON for database operations
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'post_id': post_id,
       'author': author,
       'username': username,
+      'user_id': user_id,
       'content': content,
       'timestamp': timestamp.toIso8601String(),
       'reactions': reactions,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:for_fajr/ui/screens/comment_screen_claude.dart';
 import 'package:for_fajr/ui/screens/feed_screen.dart' hide NewPostScreen;
 import 'package:for_fajr/ui/screens/login_screen.dart';
 import 'package:for_fajr/ui/screens/new_post_screen.dart';
@@ -51,11 +52,11 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: NoorConnectApp(),
-      initialRoute: '/sign-in',
+      initialRoute: '/comment',
       routes: {
         '/feed': (context) => NoorConnectApp(),
         '/login' : (context) => LoginScreen(),
-        // '/comment' : (context) => CommentScreenV1(postId: '1', postAuthor: 'Sister Khadijah', postContent:  'SubhanAllah! This is such a beautiful reminder. May Allah reward you for sharing this beneficial content. Ameen! 🤲',),
+        '/comment' : (context) => CommentScreen(),
         '/sign-in' : (context) => SignUpScreen(),
         '/post-list' : (context) => PostListScreen(),
         '/new-post' : (context) => NewPostScreen(),
