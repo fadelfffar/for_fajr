@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:for_fajr/ui/screens/comment_screen_claude.dart';
 import 'package:for_fajr/ui/screens/feed_screen.dart' hide NewPostScreen;
 import 'package:for_fajr/ui/screens/login_screen.dart';
 import 'package:for_fajr/ui/screens/new_post_screen.dart';
@@ -52,11 +51,10 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: NoorConnectApp(),
-      initialRoute: '/comment',
+      initialRoute: '/sign-in',
       routes: {
         '/feed': (context) => NoorConnectApp(),
         '/login' : (context) => LoginScreen(),
-        '/comment' : (context) => CommentScreen(),
         '/sign-in' : (context) => SignUpScreen(),
         '/post-list' : (context) => PostListScreen(),
         '/new-post' : (context) => NewPostScreen(),

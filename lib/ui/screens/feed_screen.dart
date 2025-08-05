@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:for_fajr/ui/screens/comment_screen_claude.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -379,12 +380,13 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                   ElevatedButton(
                                     onPressed: () async {
                                       if (_newPostController.text.isNotEmpty) {
+                                        var newPostUUID = Uuid().v4();
                                         setState(()  {
                                           Supabase.instance.client
                                         .from('posts')
                                         .insert(
                                           {
-                                            'id': Uuid().v4(),
+                                            'post_id': newPostUUID,
                                             'author': data.author,
                                             'username': data.username,
                                             'user_id': userId,
@@ -549,6 +551,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               final post = posts[index];
+              var _postId = post['post_id'];
               return AnimatedBuilder(
                 //optional TODO(): separete PostModelCard implementation on StreamBuilder's ListViewBuilder if possible and separete the animation data into _animationController if possible
       animation: Tween<double>(begin: 1.0, end: 0.95).animate(
@@ -663,10 +666,11 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                         count: post['reactions'],
                         color: post['is_reacted'] ? Colors.red : Colors.grey[600]!,
                         onTap: () {
-                          // _animationController.forward().then((_) {
-                          //   _animationController.reverse();
-                          // });
-                          // widget.onReact();
+                          Supabase.instance.client
+                          .from('post')
+                          .update({
+                            'reactions' : Supabase.instance.client.rpc('increment_likes', params: { 'post_uuid': '${post['post_id']}', 'reacted' : '${post['is_reacted']}'})
+                          });
                         },
                       ),
                       SizedBox(width: 20),
@@ -677,7 +681,14 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                         onTap: () {
                           // TODO(): route to comment screen
                           // TODO(): nest comment screen navigator to only on comment screen, not using pushNamed and routing on main.dart
-                          Navigator.pushNamed(context, '/comment');
+                          Supabase.instance.client
+                          .from('post')
+                          .update({
+                            'reactions' : Supabase.instance.client.rpc('increment_likes', params: { 'post_uuid': '${post['post_id']}', 'reacted' : '${post['is_reacted']}'})
+                          });
+                          Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => CommentScreen(postId: _postId)
+                          ));
                         },
                       ),
                       SizedBox(width: 20),

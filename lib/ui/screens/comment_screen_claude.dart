@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
 
 // TODO(): change all PostModel data usage on this code to use Supabase Data, by first fetching the data and then pass it to a ListView.builder inside a StreamBuilder
 
@@ -89,8 +88,10 @@ class PostModel {
 }
 
 class CommentScreen extends StatefulWidget {
+  final dynamic postId;
 
-  const CommentScreen({Key? key}) : super(key: key);
+
+  CommentScreen({Key? key, required this.postId}) : super(key: key);
 
   @override
   _CommentScreenState createState() => _CommentScreenState();
@@ -103,6 +104,10 @@ class _CommentScreenState extends State<CommentScreen> {
   final FocusNode _commentFocusNode = FocusNode();
   final FocusNode _replyFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
+  final _response = Supabase.instance.client
+      .from('posts')
+      .select('*')
+      .asStream();
   
   String? _replyingToId;
   String? _replyingToUsername;
@@ -518,26 +523,26 @@ class _CommentScreenState extends State<CommentScreen> {
         parentId: _replyingToId,
         depth: _replyingToId != null ? 1 : 0,
       );
-      Supabase.instance.client
-        .from('comments')
-        .insert(
-          {
-            'comment_id': Uuid().v4(),
-            'author': 'currentAuthor',
-            'username': 'currentUserName',
-            'user_id': userId,
-            'post_id': '50c58190-1ccb-4b59-87e2-512e90108deb',
-            'content': _commentController.text.trim(),
-            'timestamp': DateTime.now().toIso8601String(),
-            'reactions': 0,
-            'shares': 0,
-            'discussions': 0,
-            'is_reacted': false,
-          }).catchError((err) {
-            print('Error: $err');  // Prints 401
-            }, test: (error) {
-              return error is int && error >= 400;
-            });
+      // Supabase.instance.client
+      //   .from('comments')
+      //   .insert(
+      //     {
+      //       'comment_id': Uuid().v4(),
+      //       'author': 'currentAuthor',
+      //       'username': 'currentUserName',
+      //       'user_id': userId,
+      //       'post_id': postId,
+      //       'content': _commentController.text.trim(),
+      //       'timestamp': DateTime.now().toIso8601String(),
+      //       'reactions': 0,
+      //       'shares': 0,
+      //       'discussions': 0,
+      //       'is_reacted': false,
+      //     }).catchError((err) {
+      //       print('Error: $err');  // Prints 401
+      //       }, test: (error) {
+      //         return error is int && error >= 400;
+      //       });
 
       if (_replyingToId != null) {
         // Find the parent comment and add reply after it

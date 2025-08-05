@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 16),
                       TextButton(
                         onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/signup'),
+                            Navigator.  pushReplacementNamed(context, '/signup'),
                         child: RichText(
                           text: const TextSpan(
                             text: 'No account? ',
