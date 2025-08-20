@@ -681,11 +681,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                         onTap: () {
                           // TODO(): route to comment screen
                           // TODO(): nest comment screen navigator to only on comment screen, not using pushNamed and routing on main.dart
-                          Supabase.instance.client
-                          .from('post')
-                          .update({
-                            'reactions' : Supabase.instance.client.rpc('increment_likes', params: { 'post_uuid': '${post['post_id']}', 'reacted' : '${post['is_reacted']}'})
-                          });
                           Navigator.push(context,
                           MaterialPageRoute(builder: (context) => CommentScreen(postId: _postId)
                           ));
