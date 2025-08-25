@@ -5,6 +5,9 @@ import 'package:for_fajr/ui/screens/new_post_screen.dart';
 import 'package:for_fajr/ui/screens/post_list_screen.dart';
 import 'package:for_fajr/ui/screens/sign_up_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 
 Future<void> main() async {
@@ -13,6 +16,9 @@ Future<void> main() async {
     url: 'https://ebzjdnzaicpulzxbvucl.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViempkbnphaWNwdWx6eGJ2dWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyMDI5NTksImV4cCI6MjA1Nzc3ODk1OX0.BBAwzNxfFFRsz7oqC1VAVyeS6PiM7VaPh1kzt14lbTc',
   );
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(
+  // );
   runApp(const MainApp());
 }
 
