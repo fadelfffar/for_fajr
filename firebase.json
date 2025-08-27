@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "for-fajr-fe0a2",
     "public": "build/web",
     "ignore": [
       "firebase.json",
