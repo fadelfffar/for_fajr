@@ -50,4 +50,8 @@ jobs:
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       # - name: Run tests
+<<<<<<< HEAD
       #   run: dart test
+=======
+      #   run: dart test
+>>>>>>> ed3b05941ffc0f354cbb42639a3cd7792453c591
