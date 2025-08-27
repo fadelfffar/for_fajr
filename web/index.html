@@ -34,5 +34,24 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "firebase/app";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+    
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBrX3OWE5F8_l3RpyazerQ7XHe-1AdEcsY",
+      authDomain: "for-fajr.firebaseapp.com",
+      projectId: "for-fajr",
+      storageBucket: "for-fajr.firebasestorage.app",
+      messagingSenderId: "274042010156",
+      appId: "1:274042010156:web:97215b3b25f62a422b2f89"
+    };
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script>
 </body>
 </html>
