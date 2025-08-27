@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "(public)",
+    "site": "for-fajr-fe0a2",
+    "public": "build/android",
     "ignore": [
       "firebase.json",
       "**/.*",
