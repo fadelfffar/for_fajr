@@ -21,6 +21,9 @@ jobs:
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
+      - name: Upgrade dependencies
+        run: flutter pub upgrade
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -30,9 +33,6 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-
-      - name: Upgrade dependencies
-        run: flutter pub upgrade
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
       # - name: Verify formatting
