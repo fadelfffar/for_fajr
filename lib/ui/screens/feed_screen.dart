@@ -200,8 +200,8 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   late PostModel data;
   // Loading state
   // function to get current user id with null-safe setting and debug test
-  final userId = Supabase.instance.client.auth.currentUser?.id ?? 'no-user';
-  
+  final userId = Supabase.instance.client.auth.currentUser!.id ?? 'no-user';
+
 
   @override
   void initState() {
@@ -211,7 +211,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       post_id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
       author: 'Hafiz Mahmoud',
       username: 'hafiz_mahmoud',
-      user_id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
+      user_id: userId,
       content: 'La hawla wa la quwwata illa billah - There is no power except with Allah. When life gets overwhelming, remember that Allah is always in control. Trust His wisdom and timing. 🤲',
       timestamp: DateTime.now().subtract(Duration(minutes: 15)),
       reactions: 234,
@@ -409,7 +409,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                           SnackBar(
                                             content: Text('Your thought has been shared! Barakallahu feeki.'),
                                             backgroundColor: Color(0xFF004D40),
-                                          ),
+                                          ),  
                                         );
                                       }
                                     },
