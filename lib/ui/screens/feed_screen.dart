@@ -200,7 +200,11 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   late PostModel data;
   // Loading state
   // function to get current user id with null-safe setting and debug test
-  final userId = Supabase.instance.client.auth.currentUser!.id ?? 'no-user';
+  final User? user = Supabase.instance.client.auth.currentUser;
+  late final userId = user!.id ?? 'no-user';
+  late final Map<String, dynamic>? metadata = user?.userMetadata;
+  late final fullName = metadata?['full_name'];
+  late final userName = metadata?['username'];
 
 
   @override
@@ -209,14 +213,14 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
     _tabController = TabController(length: 5, vsync: this);
     data = PostModel(
       post_id: '5e2547a6-b49f-4e9b-8608-4488b285b84f',
-      author: 'Hafiz Mahmoud',
-      username: 'hafiz_mahmoud',
+      author: fullName,
+      username: userName,
       user_id: userId,
       content: 'La hawla wa la quwwata illa billah - There is no power except with Allah. When life gets overwhelming, remember that Allah is always in control. Trust His wisdom and timing. 🤲',
-      timestamp: DateTime.now().subtract(Duration(minutes: 15)),
-      reactions: 234,
-      shares: 45,
-      discussions: 67,
+      timestamp: DateTime.now(),
+      reactions: 0,
+      shares: 0,
+      discussions: 0,
       isReacted: false,
     );
   }
