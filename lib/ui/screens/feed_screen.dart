@@ -391,8 +391,8 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
                                         .insert(
                                           {
                                             'post_id': newPostUUID,
-                                            'author': data.author,
-                                            'username': data.username,
+                                            'author': fullName,
+                                            'username': userName,
                                             'user_id': userId,
                                             'content': data.content,
                                             'timestamp': DateTime.now().toIso8601String(),
